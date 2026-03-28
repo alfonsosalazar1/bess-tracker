@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tracker BESS — Solarity Energía</title>
+<style>
+:root {
+  --navy:      #1F3864;
+  --blue:      #2E75B6;
+  --light:     #EBF3FB;
+  --white:     #FFFFFF;
+  --green:     #1E7145;
+  --green-bg:  #C6EFCE;
+  --orange-bg: #FFEB9C;
+  --blue-bg:   #BDD7EE;
+  --red-bg:    #FFC7CE;
+  --gray:      #6B7280;
+  --border:    #D1D5DB;
+  --shadow:    0 2px 8px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:#F0F4F8;color:#1a1a2e;font-size:13px;}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1F3864 0%,#2E75B6 100%);}
+.login-box{background:#fff;border-radius:16px;padding:44px 40px;width:380px;box-shadow:0 24px 64px rgba(0,0,0,.3);text-align:center;}
+.login-logo{font-size:36px;margin-bottom:8px;}
+.login-box h2{color:var(--navy);font-size:20px;margin-bottom:4px;}
+.login-box p{color:var(--gray);font-size:12px;margin-bottom:28px;}
+.login-box input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:12px;outline:none;transition:border .15s;}
+.login-box input:focus{border-color:var(--blue);}
+.login-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;}
+.login-btn:hover{background:var(--blue);}
+.login-error{color:#DC2626;font-size:12px;margin-top:8px;min-height:16px;}
+#app{display:none;}
+header{background:var(--navy);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+header h1{color:#fff;font-size:17px;font-weight:700;letter-spacing:.4px;}
+header span{color:#93C5FD;font-size:11px;}
+.header-right{display:flex;gap:10px;align-items:center;}
+.btn{cursor:pointer;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;transition:opacity .15s;}
+.btn:hover{opacity:.85;}
+.btn-primary{background:#3B82F6;color:#fff;}
+.btn-danger{background:#DC2626;color:#fff;}
+.btn-gray{background:#E5E7EB;color:#374151;}
+.btn-export{background:#059669;color:#fff;}
+.btn-logout{background:rgba(255,255,255,.12);color:#fff;font-size:11px;padding:5px 12px;}
+.btn-logout:hover{background:rgba(255,255,255,.22);opacity:1;}
+.kpi-bar{display:flex;gap:12px;padding:16px 28px;background:var(--navy);border-top:1px solid rgba(255,255,255,.1);}
+.kpi{background:rgba(255,255,255,.08);border-radius:8px;padding:12px 18px;flex:1;text-align:center;}
+.kpi-val{font-size:22px;font-weight:700;color:#fff;}
+.kpi-lbl{font-size:10px;color:#93C5FD;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+.kpi.awarded .kpi-val{color:#6EE7B7;}
+.kpi.midterm .kpi-val{color:#FCD34D;}
+.kpi.shortterm .kpi-val{color:#93C5FD;}
+.tabs{display:flex;padding:0 28px;background:#fff;border-bottom:2px solid var(--border);}
+.tab{padding:12px 22px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--gray);transition:all .15s;user-select:none;}
+.tab:hover{color:var(--navy);}
+.tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+.toolbar{display:flex;align-items:center;gap:10px;padding:12px 28px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.toolbar input[type=text]{border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;width:220px;outline:none;}
+.toolbar input[type=text]:focus{border-color:var(--blue);}
+.filter-group{display:flex;gap:6px;}
+.filter-btn{border:1px solid var(--border);background:#fff;border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;transition:all .15s;font-weight:500;}
+.filter-btn:hover,.filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.filter-btn.awarded.active{background:var(--green);border-color:var(--green);}
+.filter-btn.midterm.active{background:#D97706;border-color:#D97706;}
+.filter-btn.shortterm.active{background:var(--blue);border-color:var(--blue);}
+.filter-btn.perdida.active{background:#DC2626;border-color:#DC2626;}
+.toolbar-right{margin-left:auto;display:flex;gap:8px;}
+.table-wrap{padding:0 28px 28px;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-top:14px;}
+thead tr{background:var(--navy);}
+th{color:#fff;padding:10px;font-size:11px;font-weight:600;text-align:center;white-space:nowrap;cursor:pointer;user-select:none;}
+th:hover{background:var(--blue);}
+td{padding:9px 10px;border-bottom:1px solid #F3F4F6;text-align:center;font-size:12px;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:#F9FAFB;}
+tr:hover td{background:var(--light)!important;}
+.td-left{text-align:left;}
+.td-comment{text-align:left;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.badge{display:inline-block;border-radius:12px;padding:3px 10px;font-size:11px;font-weight:600;}
+.badge-awarded{background:var(--green-bg);color:#155724;}
+.badge-midterm{background:var(--orange-bg);color:#7B5C00;}
+.badge-shortterm{background:var(--blue-bg);color:#1F3864;}
+.badge-perdida{background:var(--red-bg);color:#7B1F1F;}
+.btn-icon{background:none;border:none;cursor:pointer;padding:3px 6px;border-radius:4px;font-size:14px;}
+.btn-icon:hover{background:var(--light);}
+.empty{text-align:center;padding:60px;color:var(--gray);}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+#kanbanView{padding:20px 28px 28px;display:none;}
+.kanban-board{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start;}
+.kanban-col{background:#fff;border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+.kanban-header{padding:14px 16px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:opacity .15s;}
+.kanban-header:hover{opacity:.88;}
+.kanban-header.shortterm{background:var(--blue-bg);color:#1F3864;}
+.kanban-header.midterm{background:var(--orange-bg);color:#7B5C00;}
+.kanban-header.awarded{background:var(--green-bg);color:#155724;}
+.kanban-header.perdida{background:var(--red-bg);color:#7B1F1F;}
+.kanban-count{background:rgba(0,0,0,.12);border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700;}
+.kanban-cards{padding:10px;}
+.kanban-card{background:#F9FAFB;border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s;}
+.kanban-card:hover{background:var(--light);border-color:var(--blue);box-shadow:0 2px 8px rgba(46,117,182,.15);}
+.kanban-card:last-child{margin-bottom:0;}
+.card-empresa{font-size:11px;color:var(--gray);margin-bottom:2px;}
+.card-oportunidad{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.3;}
+.card-meta{display:flex;gap:6px;flex-wrap:wrap;}
+.card-pill{background:#fff;border:1px solid var(--border);border-radius:10px;padding:2px 8px;font-size:10px;color:var(--gray);}
+.card-pill strong{color:var(--navy);}
+.kanban-empty{text-align:center;padding:20px;color:#9CA3AF;font-size:12px;}
+.kanban-mwh{font-size:11px;color:var(--gray);padding:8px 16px 12px;border-top:1px solid var(--border);}
+.detail-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;align-items:center;justify-content:center;}
+.detail-backdrop.open{display:flex;}
+.detail-modal{background:#fff;border-radius:12px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.detail-header{background:var(--navy);color:#fff;padding:16px 22px;border-radius:12px 12px 0 0;display:flex;align-items:flex-start;justify-content:space-between;}
+.detail-header h2{font-size:15px;line-height:1.4;}
+.detail-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;margin-left:10px;}
+.detail-body{padding:22px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.detail-item{display:flex;flex-direction:column;gap:3px;}
+.detail-item.full{grid-column:1/-1;}
+.detail-lbl{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;}
+.detail-val{font-size:14px;color:var(--navy);font-weight:600;}
+.detail-val.comment{font-weight:400;color:#374151;font-size:13px;line-height:1.5;}
+.detail-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal{background:#fff;border-radius:12px;width:720px;max-width:95vw;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-header{background:var(--navy);color:#fff;padding:16px 24px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;}
+.modal-header h2{font-size:15px;}
+.modal-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;}
+.modal-body{padding:24px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;}
+.form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:Arial,sans-serif;outline:none;transition:border .15s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue);}
+.form-group textarea{resize:vertical;min-height:60px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+.confirm-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
+.confirm-backdrop.open{display:flex;}
+.confirm-box{background:#fff;border-radius:10px;padding:28px;width:360px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.2);}
+.confirm-box h3{margin-bottom:10px;}
+.confirm-box p{color:var(--gray);font-size:13px;margin-bottom:20px;}
+.confirm-actions{display:flex;gap:10px;justify-content:center;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:#f1f1f1;}
+::-webkit-scrollbar-thumb{background:#c1c1c1;border-radius:3px;}
+@media(max-width:768px){.kanban-board{grid-template-columns:1fr 1fr;}.kpi-bar{flex-wrap:wrap;}.form-grid{grid-template-columns:1fr;}.detail-grid{grid-template-columns:1fr;}}
+@media(max-width:500px){.kanban-board{grid-template-columns:1fr;}.table-wrap,.toolbar{padding-left:12px;padding-right:12px;}}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">⚡</div>
+    <h2>Solarity BESS Tracker</h2>
+    <p>Acceso exclusivo equipo comercial</p>
+    <input type="text"     id="loginUser" placeholder="Usuario" autocomplete="username"/>
+    <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<div id="app">
+<header>
+  <div>
+    <h1>⚡ Tracker de Oportunidades BESS</h1>
+    <span>Solarity Energía — Uso exclusivo equipo comercial</span>
+  </div>
+  <div class="header-right">
+    <span id="dateLabel" style="color:#93C5FD;font-size:11px;"></span>
+    <button class="btn btn-primary" onclick="openModal()">+ Nueva Oportunidad</button>
+    <button class="btn btn-logout" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+</header>
+
+<div class="kpi-bar">
+  <div class="kpi"><div class="kpi-val" id="kpi-total">0</div><div class="kpi-lbl">Total Oportunidades</div></div>
+  <div class="kpi awarded"><div class="kpi-val" id="kpi-awarded">0</div><div class="kpi-lbl">Awarded</div></div>
+  <div class="kpi midterm"><div class="kpi-val" id="kpi-midterm">0</div><div class="kpi-lbl">Mid Term</div></div>
+  <div class="kpi shortterm"><div class="kpi-val" id="kpi-shortterm">0</div><div class="kpi-lbl">Short Term</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-mwh">0 MWh</div><div class="kpi-lbl">MWh Pipeline</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-capex">$0M</div><div class="kpi-lbl">CAPEX Pipeline</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-tir">—</div><div class="kpi-lbl">TIR Prom. Pond.</div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" id="tab-table"  onclick="switchTab('table')">📋 Tabla</div>
+  <div class="tab"        id="tab-kanban" onclick="switchTab('kanban')">🗂 Tablero Pipeline</div>
+</div>
+
+<div class="toolbar" id="toolbarEl">
+  <input type="text" id="searchInput" placeholder="🔍  Buscar empresa, oportunidad, RM..." oninput="renderTable()"/>
+  <div class="filter-group">
+    <button class="filter-btn active"      onclick="setFilter('all',this)">Todos</button>
+    <button class="filter-btn shortterm"   onclick="setFilter('Short Term',this)">Short Term</button>
+    <button class="filter-btn midterm"     onclick="setFilter('Mid Term',this)">Mid Term</button>
+    <button class="filter-btn awarded"     onclick="setFilter('Awarded',this)">Awarded</button>
+    <button class="filter-btn perdida"     onclick="setFilter('Perdida',this)">Perdida</button>
+  </div>
+  <div class="toolbar-right">
+    <button class="btn btn-export" onclick="exportCSV()">↓ Exportar CSV</button>
+  </div>
+</div>
+
+<div class="table-wrap" id="tableView">
+  <table>
+    <thead><tr>
+      <th onclick="sortBy('rm')">R.M. ↕</th>
+      <th onclick="sortBy('empresa')">Empresa ↕</th>
+      <th onclick="sortBy('oportunidad')">Oportunidad BESS ↕</th>
+      <th onclick="sortBy('capacidad')">Cap. (MWh) ↕</th>
+      <th onclick="sortBy('potencia')">Pot. (MW) ↕</th>
+      <th onclick="sortBy('capex')">CAPEX Unit. (USD/kWh) ↕</th>
+      <th onclick="sortBy('capexTotal')">CAPEX Total (USD) ↕</th>
+      <th onclick="sortBy('tir')">TIR ↕</th>
+      <th onclick="sortBy('cuota')">Cuota (USD/Mes) ↕</th>
+      <th onclick="sortBy('anios')">Años ↕</th>
+      <th onclick="sortBy('probabilidad')">Prob. ↕</th>
+      <th onclick="sortBy('status')">Status ↕</th>
+      <th onclick="sortBy('fechaUpside')">F. Upside ↕</th>
+      <th onclick="sortBy('fechaDownside')">F. Downside ↕</th>
+      <th>Comentarios</th>
+      <th>Acciones</th>
+    </tr></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div id="kanbanView">
+  <div class="kanban-board">
+    <div class="kanban-col">
+      <div class="kanban-header shortterm" onclick="filterFromKanban('Short Term')">
+        <span>🔵 Short Term</span><span class="kanban-count" id="cnt-shortterm">0</span>
+      </div>
+      <div class="kanban-cards" id="cards-shortterm"></div>
+      <div class="kanban-mwh" id="mwh-shortterm"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-header midterm" onclick="filterFromKanban('Mid Term')">
+        <span>🟡 Mid Term</span><span class="kanban-count" id="cnt-midterm">0</span>
+      </div>
+      <div class="kanban-cards" id="cards-midterm"></div>
+      <div class="kanban-mwh" id="mwh-midterm"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-header awarded" onclick="filterFromKanban('Awarded')">
+        <span>🟢 Awarded</span><span class="kanban-count" id="cnt-awarded">0</span>
+      </div>
+      <div class="kanban-cards" id="cards-awarded"></div>
+      <div class="kanban-mwh" id="mwh-awarded"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-header perdida" onclick="filterFromKanban('Perdida')">
+        <span>🔴 Perdida</span><span class="kanban-count" id="cnt-perdida">0</span>
+      </div>
+      <div class="kanban-cards" id="cards-perdida"></div>
+      <div class="kanban-mwh" id="mwh-perdida"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="detail-backdrop" id="detailBackdrop">
+  <div class="detail-modal">
+    <div class="detail-header">
+      <div><h2 id="d-oportunidad"></h2><div style="margin-top:4px;" id="d-badge"></div></div>
+      <button class="detail-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-body">
+      <div class="detail-grid">
+        <div class="detail-item"><span class="detail-lbl">R.M.</span><span class="detail-val" id="d-rm"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Empresa</span><span class="detail-val" id="d-empresa"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Capacidad</span><span class="detail-val" id="d-capacidad"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Potencia</span><span class="detail-val" id="d-potencia"></span></div>
+        <div class="detail-item"><span class="detail-lbl">CAPEX Unit. (USD/kWh)</span><span class="detail-val" id="d-capex"></span></div>
+        <div class="detail-item"><span class="detail-lbl">CAPEX Total (USD)</span><span class="detail-val" id="d-capexTotal"></span></div>
+        <div class="detail-item"><span class="detail-lbl">TIR (%)</span><span class="detail-val" id="d-tir"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Cuota (USD/Mes)</span><span class="detail-val" id="d-cuota"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Años Contrato</span><span class="detail-val" id="d-anios"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Probabilidad</span><span class="detail-val" id="d-prob"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Fecha Upside</span><span class="detail-val" id="d-upside"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Fecha Downside</span><span class="detail-val" id="d-downside"></span></div>
+        <div class="detail-item full"><span class="detail-lbl">Comentarios</span><span class="detail-val comment" id="d-comentarios"></span></div>
+      </div>
+    </div>
+    <div class="detail-footer">
+      <button class="btn btn-gray" onclick="closeDetail()">Cerrar</button>
+      <button class="btn btn-primary" id="d-editBtn">✏️ Editar</button>
+    </div>
+  </div>
+</div>
+
+<!-- FORM MODAL -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Nueva Oportunidad BESS</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="oppForm" onsubmit="saveOpp(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>R.M. *</label>
+            <select id="f-rm" required><option value="">Seleccionar...</option>
+              <option>Alfonso Salazar</option><option>RM 2</option><option>RM 3</option><option>RM 4</option><option>RM 5</option>
+            </select></div>
+          <div class="form-group"><label>Empresa *</label><input type="text" id="f-empresa" placeholder="Nombre del cliente" required/></div>
+          <div class="form-group full"><label>Nombre Oportunidad BESS *</label><input type="text" id="f-oportunidad" placeholder="Ej: BESS 20 MWh Collahuasi" required/></div>
+          <div class="form-group"><label>Capacidad (MWh) *</label><input type="number" id="f-capacidad" placeholder="0" min="0" step="0.1" required/></div>
+          <div class="form-group"><label>Potencia (MW)</label><input type="number" id="f-potencia" placeholder="0" min="0" step="0.1"/></div>
+          <div class="form-group"><label>CAPEX unitario (USD/kWh)</label><input type="number" id="f-capex" placeholder="0" min="0" step="0.01"/></div>
+          <div class="form-group"><label>TIR (%)</label><input type="number" id="f-tir" placeholder="0.0" min="0" max="100" step="0.1"/></div>
+          <div class="form-group"><label>Cuota (USD/Mes)</label><input type="number" id="f-cuota" placeholder="0" min="0" step="1"/></div>
+          <div class="form-group"><label>Años de Contrato</label><input type="number" id="f-anios" placeholder="0" min="0" step="1"/></div>
+          <div class="form-group"><label>Probabilidad (%)</label>
+            <select id="f-probabilidad"><option value="">—</option><option>10%</option><option>25%</option><option>50%</option><option>75%</option><option>90%</option><option>100%</option></select></div>
+          <div class="form-group"><label>Status Pipeline *</label>
+            <select id="f-status" required><option value="">Seleccionar...</option><option>Short Term</option><option>Mid Term</option><option>Awarded</option><option>Perdida</option></select></div>
+          <div class="form-group"></div>
+          <div class="form-group"><label>Fecha Upside</label><input type="date" id="f-fechaUpside"/></div>
+          <div class="form-group"><label>Fecha Downside</label><input type="date" id="f-fechaDownside"/></div>
+          <div class="form-group full"><label>Comentarios</label><textarea id="f-comentarios" placeholder="Notas adicionales..."></textarea></div>
+        </div>
+        <input type="hidden" id="f-id"/>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gray" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="document.getElementById('oppForm').requestSubmit()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
+<div class="confirm-backdrop" id="confirmBackdrop">
+  <div class="confirm-box">
+    <h3>¿Eliminar oportunidad?</h3>
+    <p>Esta acción no se puede deshacer.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-gray" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CREDS={user:'Solaritybess',pass:'2026'};
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(u===CREDS.user&&p===CREDS.pass){
+    sessionStorage.setItem('bess_auth','1');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    init();
+  }else{
+    document.getElementById('loginError').textContent='Usuario o contraseña incorrectos.';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginPass').focus();
+  }
+}
+function doLogout(){sessionStorage.removeItem('bess_auth');location.reload();}
+if(sessionStorage.getItem('bess_auth')==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+}
+
+let data=JSON.parse(localStorage.getItem('bess_tracker')||'[]');
+if(data.length===0){
+  data=[
+    {id:uid(),rm:'Alfonso Salazar',empresa:'Minera Collahuasi', oportunidad:'BESS 20 MWh Collahuasi', capacidad:20,potencia:10,capex:175,tir:12,cuota:85000, anios:15,probabilidad:'75%',status:'Mid Term',  fechaUpside:'2026-06-30',fechaDownside:'2026-09-30',comentarios:'Proyecto piloto'},
+    {id:uid(),rm:'RM 2',           empresa:'ENAP Refinerías',   oportunidad:'BESS 50 MWh ENAP Biobío',capacidad:50,potencia:25,capex:170,tir:14,cuota:210000,anios:20,probabilidad:'50%',status:'Short Term',fechaUpside:'2026-05-15',fechaDownside:'2026-08-15',comentarios:'Segunda etapa proyecto solar'},
+    {id:uid(),rm:'Alfonso Salazar',empresa:'Aguas Andinas',      oportunidad:'BESS 10 MWh Lo Castillo',capacidad:10,potencia:5, capex:180,tir:13,cuota:42000, anios:10,probabilidad:'25%',status:'Awarded',   fechaUpside:'2026-04-30',fechaDownside:'2026-07-31',comentarios:'Requiere revisión técnica'},
+  ];
+  save();
+}
+
+let currentFilter='all',sortKey=null,sortDir=1,pendingDeleteId=null,currentView='table';
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function save(){localStorage.setItem('bess_tracker',JSON.stringify(data));}
+function fmt(n){return(n!=null&&n!=='')?Number(n).toLocaleString('es-CL'):'—';}
+function fmtUSD(n){if(n==null||n==='')return'—';return'$'+Number(n).toLocaleString('es-CL');}
+function fmtPct(n){return(n!=null&&n!=='')?Number(n).toFixed(1)+'%':'—';}
+function fmtDate(d){if(!d)return'—';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`;}
+function today(){return new Date().toISOString().slice(0,10);}
+
+function switchTab(view){
+  currentView=view;
+  document.getElementById('tab-table').classList.toggle('active',view==='table');
+  document.getElementById('tab-kanban').classList.toggle('active',view==='kanban');
+  document.getElementById('tableView').style.display=view==='table'?'':'none';
+  document.getElementById('toolbarEl').style.display=view==='table'?'':'none';
+  document.getElementById('kanbanView').style.display=view==='kanban'?'':'none';
+  if(view==='kanban')renderKanban();else renderTable();
+}
+
+function renderTable(){
+  const q=(document.getElementById('searchInput').value||'').toLowerCase();
+  let rows=data.filter(r=>{
+    const match=currentFilter==='all'||r.status===currentFilter;
+    const search=!q||[r.rm,r.empresa,r.oportunidad,r.comentarios].some(v=>(v||'').toLowerCase().includes(q));
+    return match&&search;
+  });
+  if(sortKey)rows.sort((a,b)=>{
+    let av=a[sortKey]??'',bv=b[sortKey]??'';
+    if(!isNaN(parseFloat(av))&&!isNaN(parseFloat(bv))){av=parseFloat(av);bv=parseFloat(bv);}
+    return av<bv?-sortDir:av>bv?sortDir:0;
+  });
+  const tbody=document.getElementById('tableBody');
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="16"><div class="empty"><div class="empty-icon">📋</div>Sin oportunidades en este filtro.</div></td></tr>`;updateKPIs();return;}
+  const bmap={awarded:'badge-awarded',midterm:'badge-midterm',shortterm:'badge-shortterm',perdida:'badge-perdida'};
+  tbody.innerHTML=rows.map(r=>{
+    const ct=(r.capacidad&&r.capex)?r.capacidad*1000*r.capex:null;
+    const sk=(r.status||'').toLowerCase().replace(' ','');
+    return`<tr>
+      <td>${r.rm||'—'}</td>
+      <td class="td-left"><strong>${r.empresa||'—'}</strong></td>
+      <td class="td-left">${r.oportunidad||'—'}</td>
+      <td>${fmt(r.capacidad)}</td><td>${fmt(r.potencia)}</td>
+      <td>${fmtUSD(r.capex)}</td><td>${ct?fmtUSD(ct):'—'}</td>
+      <td>${fmtPct(r.tir)}</td><td>${fmtUSD(r.cuota)}</td>
+      <td>${r.anios||'—'}</td><td>${r.probabilidad||'—'}</td>
+      <td><span class="badge ${bmap[sk]||''}">${r.status||'—'}</span></td>
+      <td>${fmtDate(r.fechaUpside)}</td><td>${fmtDate(r.fechaDownside)}</td>
+      <td class="td-comment" title="${(r.comentarios||'').replace(/"/g,'&quot;')}">${r.comentarios||'—'}</td>
+      <td>
+        <button class="btn-icon" onclick="editOpp('${r.id}')">✏️</button>
+        <button class="btn-icon" onclick="confirmDelete('${r.id}')">🗑️</button>
+      </td></tr>`;
+  }).join('');
+  updateKPIs();
+}
+
+const STATUS_COLS=[{key:'Short Term',id:'shortterm'},{key:'Mid Term',id:'midterm'},{key:'Awarded',id:'awarded'},{key:'Perdida',id:'perdida'}];
+
+function renderKanban(){
+  STATUS_COLS.forEach(({key,id})=>{
+    const rows=data.filter(r=>r.status===key);
+    const mwh=rows.reduce((s,r)=>s+(parseFloat(r.capacidad)||0),0);
+    const capex=rows.reduce((s,r)=>s+(parseFloat(r.capacidad)||0)*1000*(parseFloat(r.capex)||0),0);
+    document.getElementById('cnt-'+id).textContent=rows.length;
+    const mwhEl=document.getElementById('mwh-'+id);
+    mwhEl.innerHTML=rows.length?`<strong>${mwh.toLocaleString('es-CL')} MWh</strong> · CAPEX: <strong>$${(capex/1e6).toFixed(1)}M</strong>`:'';
+    const cardsEl=document.getElementById('cards-'+id);
+    if(!rows.length){cardsEl.innerHTML='<div class="kanban-empty">Sin proyectos en este stage</div>';return;}
+    cardsEl.innerHTML=rows.map(r=>{
+      const ct=(r.capacidad&&r.capex)?(r.capacidad*1000*r.capex):null;
+      return`<div class="kanban-card" onclick="showDetail('${r.id}')">
+        <div class="card-empresa">${r.empresa||'—'}</div>
+        <div class="card-oportunidad">${r.oportunidad||'—'}</div>
+        <div class="card-meta">
+          <span class="card-pill"><strong>${fmt(r.capacidad)}</strong> MWh</span>
+          ${r.tir?`<span class="card-pill">TIR <strong>${fmtPct(r.tir)}</strong></span>`:''}
+          ${ct?`<span class="card-pill">$<strong>${(ct/1e6).toFixed(1)}M</strong></span>`:''}
+          ${r.probabilidad?`<span class="card-pill">Prob. <strong>${r.probabilidad}</strong></span>`:''}
+          <span class="card-pill">RM: <strong>${r.rm||'—'}</strong></span>
+        </div></div>`;
+    }).join('');
+  });
+  updateKPIs();
+}
+
+function filterFromKanban(status){
+  switchTab('table');
+  currentFilter=status;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(b=>{if(b.textContent.trim()===status)b.classList.add('active');});
+  renderTable();
+}
+
+function showDetail(id){
+  const r=data.find(x=>x.id===id);if(!r)return;
+  const ct=(r.capacidad&&r.capex)?r.capacidad*1000*r.capex:null;
+  const bmap={awarded:'badge-awarded',midterm:'badge-midterm',shortterm:'badge-shortterm',perdida:'badge-perdida'};
+  const sk=(r.status||'').toLowerCase().replace(' ','');
+  document.getElementById('d-oportunidad').textContent=r.oportunidad||'—';
+  document.getElementById('d-badge').innerHTML<`<span class="badge ${bmap[sk]||''}">${r.status||'—'}</span>`;
+  document.getElementById('d-rm').textContent=r.rm||'—';
+  document.getElementById('d-empresa').textContent=r.empresa||'—';
+  document.getElementById('d-capacidad').textContent=fmt(r.capacidad)+' MWh';
+  document.getElementById('d-potencia').textContent=r.potencia?fmt(r.potencia)+' MW':'—';
+  document.getElementById('d-capex').textContent=fmtUSD(r.capex);
+  document.getElementById('d-capexTotal').textContent=ct?fmtUSD(ct):'—';
+  document.getElementById('d-tir').textContent=fmtPct(r.tir);
+  document.getElementById('d-cuota').textContent=fmtUSD(r.cuota);
+  document.getElementById('d-anios').textContent=r.anios?r.anios+' años':'—';
+  document.getElementById('d-prob').textContent=r.probabilidad||'—';
+  document.getElementById('d-upside').textContent=fmtDate(r.fechaUpside);
+  document.getElementById('d-downside').textContent=fmtDate(r.fechaDownside);
+  document.getElementById('d-comentarios').textContent=r.comentarios||'—';
+  document.getElementById('d-editBtn').onclick=()=>{closeDetail();editOpp(id);};
+  document.getElementById('detailBackdrop').classList.add('open');
+}
+function closeDetail(){document.getElementById('detailBackdrop').classList.remove('open');}
+
+function updateKPIs(){
+  const active=data.filter(r=>r.status!=='Perdida');
+  document.getElementById('kpi-total').textContent=data.length;
+  document.getElementById('kpi-awarded').textContent=data.filter(r=>r.status==='Awarded').length;
+  document.getElementById('kpi-midterm').textContent=data.filter(r=>r.status==='Mid Term').length;
+  document.getElementById('kpi-shortterm').textContent=data.filter(r=>r.status==='Short Term').length;
+  const mwh=active.reduce((s,r)=>s+(parseFloat(r.capacidad)||0),0);
+  document.getElementById('kpi-mwh').textContent=mwh.toLocaleString('es-CL')+' MWh';
+  const capex=active.reduce((s,r)=>s+(parseFloat(r.capacidad)||0)*1000*(parseFloat(r.capex)||0),0);
+  document.getElementById('kpi-capex').textContent='$'+(capex/1e6).toFixed(1)+'M';
+  const wN=active.reduce((s,r)=>s+(parseFloat(r.tir)||0)*(parseFloat(r.capacidad)||0),0);
+  const wD=active.reduce((s,r)=>s+(parseFloat(r.capacidad)||0),0);
+  document.getElementById('kpi-tir').textContent=wD>0?(wN/wD).toFixed(1)+'%':'—';
+}
+
+function sortBy(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}renderTable();}
+function setFilter(f,el){currentFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderTable();}
+
+function openModal(id){
+  document.getElementById('modalBackdrop').classList.add('open');
+  document.getElementById('oppForm').reset();
+  document.getElementById('f-id').value='';
+  document.getElementById('modalTitle').textContent='Nueva Oportunidad BESS';
+  if(id){
+    const r=data.find(x=>x.id===id);if(!r)return;
+    document.getElementById('modalTitle').textContent='Editar Oportunidad';
+    ['id','rm','empresa','oportunidad','capacidad','potencia','capex','tir','cuota','anios','probabilidad','status','fechaUpside','fechaDownside','comentarios'].forEach(k=>{
+      const el=document.getElementById('f-'+k);if(el)el.value=r[k]||'';
+    });
+  }
+}
+function closeModal(){document.getElementById('modalBackdrop').classList.remove('open');}
+function editOpp(id){openModal(id);}
+
+function saveOpp(e){
+  e.preventDefault();
+  const id=document.getElementById('f-id').value;
+  const obj={id:id||uid(),rm:document.getElementById('f-rm').value,empresa:document.getElementById('f-empresa').value,oportunidad:document.getElementById('f-oportunidad').value,capacidad:document.getElementById('f-capacidad').value,potencia:document.getElementById('f-potencia').value,capex:document.getElementById('f-capex').value,tir:document.getElementById('f-tir').value,cuota:document.getElementById('f-cuota').value,anios:document.getElementById('f-anios').value,probabilidad:document.getElementById('f-probabilidad').value,status:document.getElementById('f-status').value,fechaUpside:document.getElementById('f-fechaUpside').value,fechaDownside:document.getElementById('f-fechaDownside').value,comentarios:document.getElementById('f-comentarios').value};
+  if(id){const i=data.findIndex(x=>x.id===id);if(i>=0)data[i]=obj;}else data.push(obj);
+  save();closeModal();
+  if(currentView==='kanban')renderKanban();else renderTable();
+}
+
+function confirmDelete(id){pendingDeleteId=id;document.getElementById('confirmBackdrop').classList.add('open');}
+function closeConfirm(){pendingDeleteId=null;document.getElementById('confirmBackdrop').classList.remove('open');}
+document.getElementById('confirmDeleteBtn').onclick=()=>{
+  if(pendingDeleteId){data=data.filter(x=>x.id!==pendingDeleteId);save();if(currentView==='kanban')renderKanban();else renderTable();}
+  closeConfirm();
+};
+
+function exportCSV(){
+  const headers=['R.M.','Empresa','Oportunidad BESS','Capacidad (MWh)','Potencia (MW)','CAPEX Unit. (USD/kWh)','CAPEX Total (USD)','TIR (%)','Cuota (USD/Mes)','Años Contrato','Probabilidad','Status Pipeline','Fecha Upside','Fecha Downside','Comentarios'];
+  const rows=data.map(r=>{const ct=(r.capacidad&&r.capex)?(parseFloat(r.capacidad)*1000*parseFloat(r.capex)).toFixed(0):'';return[r.rm,r.empresa,r.oportunidad,r.capacidad,r.potencia,r.capex,ct,r.tir,r.cuota,r.anios,r.probabilidad,r.status,r.fechaUpside,r.fechaDownside,r.comentarios].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(',');});
+  const csv='\uFEFF'+[headers.join(','),...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`Pipeline_BESS_${today()}.csv`;a.click();URL.revokeObjectURL(url);
+}
+
+document.getElementById('modalBackdrop').addEventListener('click',e=>{if(e.target===document.getElementById('modalBackdrop'))closeModal();});
+document.getElementById('detailBackdrop').addEventListener('click',e=>{if(e.target===document.getElementById('detailBackdrop'))closeDetail();});
+document.getElementById('confirmBackdrop').addEventListener('click',e=>{if(e.target===document.getElementById('confirmBackdrop'))closeConfirm();});
+
+function init(){
+  document.getElementById('dateLabel').textContent=new Date().toLocaleDateString('es-CL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  renderTable();
+}
+if(sessionStorage.getItem('bess_auth')==='1')init();
+</script>
+</body>
+</html>
