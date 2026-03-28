@@ -69,7 +69,7 @@ header span{color:#93C5FD;font-size:11px;}
 .table-wrap{padding:0 28px 28px;overflow-x:auto;}
 table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-top:14px;}
 thead tr{background:var(--navy);}
-th{color:#fff;padding:10px;font-size:11px;font-weight:600;text-align:center;white-space:nowrap;cursor:pointer;user-select:none;}
+th{color:#fff;padding:10px;font-size:11px;font-weight:600;text-align:center;white-space:nowraw;cursor:pointer;user-select:none;}
 th:hover{background:var(--blue);}
 td{padding:9px 10px;border-bottom:1px solid #F3F4F6;text-align:center;font-size:12px;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
@@ -132,7 +132,7 @@ tr:hover td{background:var(--light)!important;}
 .form-group{display:flex;flex-direction:column;gap:4px;}
 .form-group.full{grid-column:1/-1;}
 label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;}
-.form-groug input,.form-groug select,.form-group textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:Arial,sans-serif;outline:none;transition:border .15s;}
+.form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:Arial,sans-serif;outline:none;transition:border .15s;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue);}
 .form-group textarea{resize:vertical;min-height:60px;}
 .modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
@@ -307,7 +307,7 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
         <div class="form-grid">
           <div class="form-group"><label>R.M. *</label>
             <select id="f-rm" required><option value="">Seleccionar...</option>
-              <option>Alfonso Salazar</option><option>Antonia Vial</option><option>Clemente Alessandri</option><option>Francisca Sánchez</option><option>Horacio Melo</option><option>Ignacio Álvarez</option><option>Javier Felmer</option><option>Javiera Beiza</option><option>Jose Carvallo</option><option>José Pablo Kemp</option><option>Lucas Soulodre</option><option>Olga Palade</option><option>Rafael Brito</option><option>Sergio Carvajal</option><option>Valentina Vasquez</option>
+              <option>Alfonso Salazar</option><option>Antonia Vial</option><option>Clemente Alessandri</option><option>Javiera Beiza</option><option>Jose Carvallo</option><option>José Pablo Kemp</option><option>Juan Pablo Varela</option><option>Lucas Soulodre</option><option>Rafael Brito</option><option>Valentina Vasquez</option>
             </select></div>
           <div class="form-group"><label>Empresa *</label><input type="text" id="f-empresa" placeholder="Nombre del cliente" required/></div>
           <div class="form-group full"><label>Nombre Oportunidad BESS *</label><input type="text" id="f-oportunidad" placeholder="Ej: BESS 20 MWh Collahuasi" required/></div>
@@ -373,7 +373,7 @@ if(sessionStorage.getItem('bess_auth')==='1'){
 let data=JSON.parse(localStorage.getItem('bess_tracker')||'[]');
 if(data.length===0){
   data=[
-    {id:uid(),rm:'Alfonso Salazar',empresa:'Minera Collahuasi', oportunidad:'BESS 20 MWh Collahuasi', capacidad:20,potencia:10,capex:175,tir:12,cuota:85000, anios:15,probabilidad:'75%',status:'Mid Term',  fechaUpside:'2026-06-30',fechaDownside:'2026-09-30',comentarios:'Proyecto piloto'},
+    {id:uid(),rm:'Alfonso Salazar',empresa:'Minera Collahuasi', oportunidad:'BESS 20 MWh Collahuasi', capacidad:20,potencia:10,capex:175,tir:12,cuota:85000, anios:15,probabilidad:'75%',status:'Mid Term',  fechaUpside:'2026-06-30',fechaDownside:'2026-09-30',comentarios:'Proyecto piloto"},
     {id:uid(),rm:'RM 2',           empresa:'ENAP Refinerías',   oportunidad:'BESS 50 MWh ENAP Biobío',capacidad:50,potencia:25,capex:170,tir:14,cuota:210000,anios:20,probabilidad:'50%',status:'Short Term',fechaUpside:'2026-05-15',fechaDownside:'2026-08-15',comentarios:'Segunda etapa proyecto solar'},
     {id:uid(),rm:'Alfonso Salazar',empresa:'Aguas Andinas',      oportunidad:'BESS 10 MWh Lo Castillo',capacidad:10,potencia:5, capex:180,tir:13,cuota:42000, anios:10,probabilidad:'25%',status:'Awarded',   fechaUpside:'2026-04-30',fechaDownside:'2026-07-31',comentarios:'Requiere revisión técnica'},
   ];
