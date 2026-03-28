@@ -132,7 +132,7 @@ tr:hover td{background:var(--light)!important;}
 .form-group{display:flex;flex-direction:column;gap:4px;}
 .form-group.full{grid-column:1/-1;}
 label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;}
-.form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:Arial,sans-serif;outline:none;transition:border .15s;}
+.form-groug input,.form-groug select,.form-group textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:Arial,sans-serif;outline:none;transition:border .15s;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue);}
 .form-group textarea{resize:vertical;min-height:60px;}
 .modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
@@ -171,6 +171,7 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
   </div>
   <div class="header-right">
     <span id="dateLabel" style="color:#93C5FD;font-size:11px;"></span>
+    <span id="syncStatus" title="Sync con dashboard" style="font-size:11px;color:#93C5FD;cursor:pointer;" onclick="pickSyncFolder()">☁ Sin sync</span>
     <button class="btn btn-primary" onclick="openModal()">+ Nueva Oportunidad</button>
     <button class="btn btn-logout" onclick="doLogout()">Cerrar sesión</button>
   </div>
@@ -306,7 +307,7 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
         <div class="form-grid">
           <div class="form-group"><label>R.M. *</label>
             <select id="f-rm" required><option value="">Seleccionar...</option>
-              <option>Alfonso Salazar</option><option>RM 2</option><option>RM 3</option><option>RM 4</option><option>RM 5</option>
+              <option>Alfonso Salazar</option><option>Antonia Vial</option><option>Clemente Alessandri</option><option>Francisca Sánchez</option><option>Horacio Melo</option><option>Ignacio Álvarez</option><option>Javier Felmer</option><option>Javiera Beiza</option><option>Jose Carvallo</option><option>José Pablo Kemp</option><option>Lucas Soulodre</option><option>Olga Palade</option><option>Rafael Brito</option><option>Sergio Carvajal</option><option>Valentina Vasquez</option>
             </select></div>
           <div class="form-group"><label>Empresa *</label><input type="text" id="f-empresa" placeholder="Nombre del cliente" required/></div>
           <div class="form-group full"><label>Nombre Oportunidad BESS *</label><input type="text" id="f-oportunidad" placeholder="Ej: BESS 20 MWh Collahuasi" required/></div>
@@ -382,7 +383,80 @@ if(data.length===0){
 let currentFilter='all',sortKey=null,sortDir=1,pendingDeleteId=null,currentView='table';
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
-function save(){localStorage.setItem('bess_tracker',JSON.stringify(data));}
+function save(){localStorage.setItem('bess_tracker',JSON.stringify(data));autoExportJSON();}
+
+// ── JSON EXPORT al archivo bess_data.json (File System Access API) ───────────
+const _IDB_NAME='bessExportDB',_IDB_STORE='handles';
+var _fsDirHandle=null;
+
+function _openIDB(){
+  return new Promise((res,rej)=>{
+    const r=indexedDB.open(_IDB_NAME,1);
+    r.onupgradeneeded=e=>e.target.result.createObjectStore(_IDB_STORE);
+    r.onsuccess=e=>res(e.target.result);
+    r.onerror=rej;
+  });
+}
+async function _getHandle(){
+  const db=await _openIDB();
+  return new Promise(r=>{
+    const req=db.transaction(_IDB_STORE,'readonly').objectStore(_IDB_STORE).get('dir');
+    req.onsuccess=e=>r(e.target.result||null);
+    req.onerror=()=>r(null);
+  });
+}
+async function _storeHandle(h){
+  const db=await _openIDB();
+  return new Promise(r=>{
+    const tx=db.transaction(_IDB_STORE,'readwrite');
+    tx.objectStore(_IDB_STORE).put(h,'dir');
+    tx.oncomplete=r;
+  });
+}
+function _setSyncStatus(ok,msg){
+  const el=document.getElementById('syncStatus');
+  if(!el)return;
+  el.textContent=msg;
+  el.style.color=ok?'#6EE7B7':'#FCA5A5';
+}
+async function pickSyncFolder(){
+  try{
+    _fsDirHandle=await window.showDirectoryPicker({mode:'readwrite'});
+    await _storeHandle(_fsDirHandle);
+    _setSyncStatus(true,'✅ Carpeta seleccionada');
+    await autoExportJSON();
+  }catch(e){
+    if(e.name!=='AbortError')_setSyncStatus(false,'⚠️ Sin sync');
+  }
+}
+async function autoExportJSON(){
+  try{
+    if(!_fsDirHandle)_fsDirHandle=await _getHandle();
+    if(!_fsDirHandle){_setSyncStatus(false,'☁ Sin sync — click para configurar');return;}
+    const perm=await _fsDirHandle.queryPermission({mode:'readwrite'});
+    if(perm!=='granted'){
+      const req=await _fsDirHandle.requestPermission({mode:'readwrite'});
+      if(req!=='granted'){_setSyncStatus(false,'⚠️ Permiso denegado');return;}
+    }
+    const fh=await _fsDirHandle.getFileHandle('bess_data.json',{create:true});
+    const w=await fh.createWritable();
+    await w.write(JSON.stringify(data,null,2));
+    await w.close();
+    const now=new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
+    _setSyncStatus(true,'✅ Sync '+now);
+  }catch(e){
+    console.warn('BESS export:',e.message);
+    _setSyncStatus(false,'⚠️ Error sync');
+  }
+}
+// Intentar restaurar handle guardado al iniciar
+(async()=>{
+  try{
+    const h=await _getHandle();
+    if(h){_fsDirHandle=h;await autoExportJSON();}
+    else{_setSyncStatus(false,'☁ Sin sync — click para configurar');}
+  }catch(_){}
+})();
 function fmt(n){return(n!=null&&n!=='')?Number(n).toLocaleString('es-CL'):'—';}
 function fmtUSD(n){if(n==null||n==='')return'—';return'$'+Number(n).toLocaleString('es-CL');}
 function fmtPct(n){return(n!=null&&n!=='')?Number(n).toFixed(1)+'%':'—';}
@@ -479,7 +553,7 @@ function showDetail(id){
   const bmap={awarded:'badge-awarded',midterm:'badge-midterm',shortterm:'badge-shortterm',perdida:'badge-perdida'};
   const sk=(r.status||'').toLowerCase().replace(' ','');
   document.getElementById('d-oportunidad').textContent=r.oportunidad||'—';
-  document.getElementById('d-badge').innerHTML<`<span class="badge ${bmap[sk]||''}">${r.status||'—'}</span>`;
+  document.getElementById('d-badge').innerHTML=`<span class="badge ${bmap[sk]||''}">${r.status||'—'}</span>`;
   document.getElementById('d-rm').textContent=r.rm||'—';
   document.getElementById('d-empresa').textContent=r.empresa||'—';
   document.getElementById('d-capacidad').textContent=fmt(r.capacidad)+' MWh';
