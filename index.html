@@ -4,208 +4,284 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tracker BESS — Solarity Energía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --navy:      #1F3864;
-  --blue:      #2E75B6;
-  --light:     #EBF3FB;
-  --white:     #FFFFFF;
-  --green:     #1E7145;
-  --green-bg:  #C6EFCE;
-  --orange-bg: #FFEB9C;
-  --blue-bg:   #BDD7EE;
-  --red-bg:    #FFC7CE;
-  --gray:      #6B7280;
-  --border:    #D1D5DB;
-  --shadow:    0 2px 8px rgba(0,0,0,.12);
-}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#F0F4F8;color:#1a1a2e;font-size:13px;}
-#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1F3864 0%,#2E75B6 100%);}
-.login-box{background:#fff;border-radius:16px;padding:44px 40px;width:380px;box-shadow:0 24px 64px rgba(0,0,0,.3);text-align:center;}
-.login-logo{font-size:36px;margin-bottom:8px;}
-.login-box h2{color:var(--navy);font-size:20px;margin-bottom:4px;}
-.login-box p{color:var(--gray);font-size:12px;margin-bottom:28px;}
-.login-box input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:12px;outline:none;transition:border .15s;}
-.login-box input:focus{border-color:var(--blue);}
-.login-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;}
-.login-btn:hover{background:var(--blue);}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat','Segoe UI',Arial,sans-serif;background:#F4F4F4;color:#262626;font-size:13px;line-height:1.5;}
+
+/* ── LOGIN ── */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#262626;}
+.login-box{background:#fff;border-radius:16px;padding:44px 40px;width:380px;box-shadow:0 24px 64px rgba(0,0,0,.35);text-align:center;}
+.login-logo{margin-bottom:14px;}
+.login-box h2{color:#262626;font-size:20px;font-weight:700;margin-bottom:4px;}
+.login-box p{color:#888;font-size:12px;margin-bottom:28px;}
+.login-box input{width:100%;border:1.5px solid #D8DCE6;border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:12px;outline:none;transition:border .15s;font-family:inherit;}
+.login-box input:focus{border-color:#F5C713;}
+.login-btn{width:100%;background:#F5C713;color:#262626;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;font-family:inherit;}
+.login-btn:hover{background:#d4a900;}
 .login-error{color:#DC2626;font-size:12px;margin-top:8px;min-height:16px;}
 #app{display:none;}
-header{background:var(--navy);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,.3);}
-header h1{color:#fff;font-size:17px;font-weight:700;letter-spacing:.4px;}
-header span{color:#93C5FD;font-size:11px;}
+
+/* ── HEADER ── */
+header{background:#262626;padding:0 28px;display:flex;align-items:center;justify-content:space-between;min-height:68px;position:sticky;top:0;z-index:100;border-bottom:3px solid #F5C713;box-shadow:0 2px 12px rgba(38,38,38,.25);}
+.header-left{display:flex;align-items:center;gap:14px;}
+.header-divider{width:1px;height:36px;background:rgba(255,255,255,.2);margin:0 4px;}
+.header-titles{display:flex;flex-direction:column;}
+.header-subtitle{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:2px;}
+.header-title-main{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.01em;}
+.header-title-main span{color:#F5C713;}
 .header-right{display:flex;gap:10px;align-items:center;}
-.btn{cursor:pointer;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;transition:opacity .15s;}
-.btn:hover{opacity:.85;}
-.btn-primary{background:#3B82F6;color:#fff;}
+.date-badge{font-size:11px;color:rgba(255,255,255,.5);font-weight:400;}
+
+/* ── BUTTONS ── */
+.btn{cursor:pointer;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;transition:all .15s;font-family:inherit;letter-spacing:.02em;}
+.btn:hover{transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
+.btn-primary{background:#F5C713;color:#262626;}
+.btn-primary:hover{background:#d4a900;}
 .btn-danger{background:#DC2626;color:#fff;}
-.btn-gray{background:#E5E7EB;color:#374151;}
-.btn-export{background:#059669;color:#fff;}
-.btn-logout{background:rgba(255,255,255,.12);color:#fff;font-size:11px;padding:5px 12px;}
-.btn-logout:hover{background:rgba(255,255,255,.22);opacity:1;}
-.kpi-bar{display:flex;gap:12px;padding:16px 28px;background:var(--navy);border-top:1px solid rgba(255,255,255,.1);}
-.kpi{background:rgba(255,255,255,.08);border-radius:8px;padding:12px 18px;flex:1;text-align:center;}
-.kpi-val{font-size:22px;font-weight:700;color:#fff;}
-.kpi-lbl{font-size:10px;color:#93C5FD;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
-.kpi.awarded .kpi-val{color:#6EE7B7;}
-.kpi.midterm .kpi-val{color:#FCD34D;}
-.kpi.shortterm .kpi-val{color:#93C5FD;}
-.tabs{display:flex;padding:0 28px;background:#fff;border-bottom:2px solid var(--border);}
-.tab{padding:12px 22px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--gray);transition:all .15s;user-select:none;}
-.tab:hover{color:var(--navy);}
-.tab.active{color:var(--navy);border-bottom-color:var(--navy);}
-.toolbar{display:flex;align-items:center;gap:10px;padding:12px 28px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap;}
-.toolbar input[type=text]{border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;width:220px;outline:none;}
-.toolbar input[type=text]:focus{border-color:var(--blue);}
+.btn-danger:hover{background:#b91c1c;}
+.btn-gray{background:#EDEDED;color:#262626;}
+.btn-gray:hover{background:#d8d8d8;}
+.btn-export{background:#262626;color:#F5C713;border:1px solid #F5C713;}
+.btn-export:hover{background:#F5C713;color:#262626;}
+.btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);font-size:11px;padding:6px 14px;border:1px solid rgba(255,255,255,.15);border-radius:20px;}
+.btn-logout:hover{background:rgba(255,255,255,.2);transform:none;opacity:1;}
+.sync-btn{background:none;border:none;color:rgba(255,255,255,.5);font-size:11px;cursor:pointer;font-family:inherit;padding:2px 6px;}
+.sync-btn:hover{color:#F5C713;}
+
+/* ── KPI STRIP ── */
+.kpi-bar{display:grid;grid-template-columns:repeat(7,1fr);gap:0;background:#fff;border-bottom:1px solid #EDEDED;}
+.kpi{padding:14px 16px;text-align:center;border-right:1px solid #EDEDED;position:relative;}
+.kpi:last-child{border-right:none;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#F5C713;}
+.kpi-val{font-size:20px;font-weight:800;color:#262626;letter-spacing:-.02em;}
+.kpi-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-top:2px;}
+.kpi.awarded .kpi-val{color:#15803D;}
+.kpi.midterm .kpi-val{color:#D97706;}
+.kpi.shortterm .kpi-val{color:#2563EB;}
+
+/* ── TABS ── */
+.tabs{display:flex;padding:0 28px;background:#fff;border-bottom:2px solid #EDEDED;}
+.tab{padding:13px 22px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:#888;transition:all .15s;user-select:none;font-family:inherit;}
+.tab:hover{color:#262626;}
+.tab.active{color:#262626;border-bottom-color:#F5C713;}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:10px;padding:12px 28px;background:#fff;border-bottom:1px solid #EDEDED;flex-wrap:wrap;}
+.toolbar input[type=text]{border:1.5px solid #D8DCE6;border-radius:8px;padding:7px 12px;font-size:12px;width:240px;outline:none;font-family:inherit;transition:border .15s;}
+.toolbar input[type=text]:focus,.toolbar input[type=text]:hover{border-color:#F5C713;}
 .filter-group{display:flex;gap:6px;}
-.filter-btn{border:1px solid var(--border);background:#fff;border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;transition:all .15s;font-weight:500;}
-.filter-btn:hover,.filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
-.filter-btn.awarded.active{background:var(--green);border-color:var(--green);}
+.filter-btn{border:1.5px solid #D8DCE6;background:#fff;border-radius:20px;padding:5px 14px;font-size:11px;cursor:pointer;transition:all .15s;font-weight:600;font-family:inherit;color:#888;}
+.filter-btn:hover,.filter-btn.active{background:#262626;color:#fff;border-color:#262626;}
+.filter-btn.awarded.active{background:#15803D;border-color:#15803D;}
 .filter-btn.midterm.active{background:#D97706;border-color:#D97706;}
-.filter-btn.shortterm.active{background:var(--blue);border-color:var(--blue);}
+.filter-btn.shortterm.active{background:#2563EB;border-color:#2563EB;}
 .filter-btn.perdida.active{background:#DC2626;border-color:#DC2626;}
 .toolbar-right{margin-left:auto;display:flex;gap:8px;}
+
+/* ── TABLE ── */
 .table-wrap{padding:0 28px 28px;overflow-x:auto;}
-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-top:14px;}
-thead tr{background:var(--navy);}
-th{color:#fff;padding:10px;font-size:11px;font-weight:600;text-align:center;white-space:nowraw;cursor:pointer;user-select:none;}
-th:hover{background:var(--blue);}
-td{padding:9px 10px;border-bottom:1px solid #F3F4F6;text-align:center;font-size:12px;vertical-align:middle;}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(38,38,38,.08);margin-top:16px;}
+thead tr{background:#262626;}
+th{color:#fff;padding:11px 10px;font-size:10px;font-weight:700;text-align:center;white-space:nowrap;cursor:pointer;user-select:none;text-transform:uppercase;letter-spacing:.05em;}
+th:hover{background:#404040;}
+td{padding:10px;border-bottom:1px solid #F3F4F6;text-align:center;font-size:12px;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
-tr:nth-child(even) td{background:#F9FAFB;}
-tr:hover td{background:var(--light)!important;}
+tr:nth-child(even) td{background:#FAFAFA;}
+tr:hover td{background:#FFF9E6!important;}
 .td-left{text-align:left;}
 .td-comment{text-align:left;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.badge{display:inline-block;border-radius:12px;padding:3px 10px;font-size:11px;font-weight:600;}
-.badge-awarded{background:var(--green-bg);color:#155724;}
-.badge-midterm{background:var(--orange-bg);color:#7B5C00;}
-.badge-shortterm{background:var(--blue-bg);color:#1F3864;}
-.badge-perdida{background:var(--red-bg);color:#7B1F1F;}
-.btn-icon{background:none;border:none;cursor:pointer;padding:3px 6px;border-radius:4px;font-size:14px;}
-.btn-icon:hover{background:var(--light);}
-.empty{text-align:center;padding:60px;color:var(--gray);}
+
+/* ── BADGES ── */
+.badge{display:inline-block;border-radius:12px;padding:3px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+.badge-awarded{background:#DCFCE7;color:#15803D;}
+.badge-midterm{background:#FEF3C7;color:#92400E;}
+.badge-shortterm{background:#DBEAFE;color:#1D4ED8;}
+.badge-perdida{background:#FEE2E2;color:#991B1B;}
+.btn-icon{background:none;border:none;cursor:pointer;padding:3px 6px;border-radius:6px;font-size:14px;transition:background .15s;}
+.btn-icon:hover{background:#FFF3CD;}
+.empty{text-align:center;padding:60px;color:#888;}
 .empty-icon{font-size:48px;margin-bottom:12px;}
+
+/* ── KANBAN ── */
 #kanbanView{padding:20px 28px 28px;display:none;}
 .kanban-board{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start;}
-.kanban-col{background:#fff;border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
-.kanban-header{padding:14px 16px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:opacity .15s;}
+.kanban-col{background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(38,38,38,.08);overflow:hidden;}
+.kanban-header{padding:14px 16px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:opacity .15s;border-bottom:3px solid transparent;}
 .kanban-header:hover{opacity:.88;}
-.kanban-header.shortterm{background:var(--blue-bg);color:#1F3864;}
-.kanban-header.midterm{background:var(--orange-bg);color:#7B5C00;}
-.kanban-header.awarded{background:var(--green-bg);color:#155724;}
-.kanban-header.perdida{background:var(--red-bg);color:#7B1F1F;}
-.kanban-count{background:rgba(0,0,0,.12);border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700;}
+.kanban-header.shortterm{background:#DBEAFE;color:#1D4ED8;border-bottom-color:#2563EB;}
+.kanban-header.midterm{background:#FEF3C7;color:#92400E;border-bottom-color:#D97706;}
+.kanban-header.awarded{background:#DCFCE7;color:#15803D;border-bottom-color:#16A34A;}
+.kanban-header.perdida{background:#FEE2E2;color:#991B1B;border-bottom-color:#DC2626;}
+.kanban-count{background:rgba(0,0,0,.1);border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700;}
 .kanban-cards{padding:10px;}
-.kanban-card{background:#F9FAFB;border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s;}
-.kanban-card:hover{background:var(--light);border-color:var(--blue);box-shadow:0 2px 8px rgba(46,117,182,.15);}
+.kanban-card{background:#FAFAFA;border:1.5px solid #EDEDED;border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s;}
+.kanban-card:hover{background:#FFF9E6;border-color:#F5C713;box-shadow:0 2px 8px rgba(245,199,19,.2);}
 .kanban-card:last-child{margin-bottom:0;}
-.card-empresa{font-size:11px;color:var(--gray);margin-bottom:2px;}
-.card-oportunidad{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.3;}
+.card-empresa{font-size:11px;color:#888;margin-bottom:2px;}
+.card-oportunidad{font-size:13px;font-weight:700;color:#262626;margin-bottom:6px;line-height:1.3;}
 .card-meta{display:flex;gap:6px;flex-wrap:wrap;}
-.card-pill{background:#fff;border:1px solid var(--border);border-radius:10px;padding:2px 8px;font-size:10px;color:var(--gray);}
-.card-pill strong{color:var(--navy);}
+.card-pill{background:#fff;border:1px solid #EDEDED;border-radius:10px;padding:2px 8px;font-size:10px;color:#888;}
+.card-pill strong{color:#262626;}
 .kanban-empty{text-align:center;padding:20px;color:#9CA3AF;font-size:12px;}
-.kanban-mwh{font-size:11px;color:var(--gray);padding:8px 16px 12px;border-top:1px solid var(--border);}
-.detail-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;align-items:center;justify-content:center;}
-.detail-backdrop.open{display:flex;}
+.kanban-mwh{font-size:11px;color:#888;padding:8px 16px 12px;border-top:1px solid #EDEDED;}
+
+/* ── MODALS ── */
+.detail-backdrop,.modal-backdrop,.confirm-backdrop{display:none;position:fixed;inset:0;background:rgba(38,38,38,.55);z-index:150;align-items:center;justify-content:center;}
+.detail-backdrop.open,.modal-backdrop.open,.confirm-backdrop.open{display:flex;}
 .detail-modal{background:#fff;border-radius:12px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
-.detail-header{background:var(--navy);color:#fff;padding:16px 22px;border-radius:12px 12px 0 0;display:flex;align-items:flex-start;justify-content:space-between;}
-.detail-header h2{font-size:15px;line-height:1.4;}
-.detail-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;margin-left:10px;}
+.detail-header{background:#262626;color:#fff;padding:16px 22px;border-radius:12px 12px 0 0;display:flex;align-items:flex-start;justify-content:space-between;}
+.detail-header::after{content:'';display:block;height:3px;background:#F5C713;position:absolute;bottom:0;left:0;right:0;}
+.detail-header{position:relative;}
+.detail-header h2{font-size:15px;line-height:1.4;font-weight:700;}
+.detail-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;margin-left:10px;padding:0;}
+.detail-close:hover{color:#F5C713;}
 .detail-body{padding:22px;}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .detail-item{display:flex;flex-direction:column;gap:3px;}
 .detail-item.full{grid-column:1/-1;}
-.detail-lbl{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;}
-.detail-val{font-size:14px;color:var(--navy);font-weight:600;}
+.detail-lbl{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;}
+.detail-val{font-size:14px;color:#262626;font-weight:600;}
 .detail-val.comment{font-weight:400;color:#374151;font-size:13px;line-height:1.5;}
-.detail-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
-.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;}
-.modal-backdrop.open{display:flex;}
+.detail-footer{padding:14px 22px;border-top:1px solid #EDEDED;display:flex;justify-content:flex-end;gap:8px;}
 .modal{background:#fff;border-radius:12px;width:720px;max-width:95vw;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
-.modal-header{background:var(--navy);color:#fff;padding:16px 24px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;}
-.modal-header h2{font-size:15px;}
-.modal-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;}
+.modal-header{background:#262626;color:#fff;padding:16px 24px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #F5C713;}
+.modal-header h2{font-size:15px;font-weight:700;}
+.modal-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;padding:0;}
+.modal-close:hover{color:#F5C713;}
 .modal-body{padding:24px;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .form-group{display:flex;flex-direction:column;gap:4px;}
 .form-group.full{grid-column:1/-1;}
-label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;}
-.form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:Arial,sans-serif;outline:none;transition:border .15s;}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue);}
+label{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;}
+.form-group input,.form-group select,.form-group textarea{border:1.5px solid #D8DCE6;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;color:#262626;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#F5C713;}
 .form-group textarea{resize:vertical;min-height:60px;}
-.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
-.confirm-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
-.confirm-backdrop.open{display:flex;}
-.confirm-box{background:#fff;border-radius:10px;padding:28px;width:360px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.2);}
-.confirm-box h3{margin-bottom:10px;}
-.confirm-box p{color:var(--gray);font-size:13px;margin-bottom:20px;}
+.modal-footer{padding:16px 24px;border-top:1px solid #EDEDED;display:flex;justify-content:flex-end;gap:8px;}
+.confirm-box{background:#fff;border-radius:12px;padding:32px;width:360px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.2);}
+.confirm-box h3{margin-bottom:10px;font-size:16px;color:#262626;}
+.confirm-box p{color:#888;font-size:13px;margin-bottom:24px;}
 .confirm-actions{display:flex;gap:10px;justify-content:center;}
+
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:6px;height:6px;}
-::-webkit-scrollbar-track{background:#f1f1f1;}
-::-webkit-scrollbar-thumb{background:#c1c1c1;border-radius:3px;}
-@media(max-width:768px){.kanban-board{grid-template-columns:1fr 1fr;}.kpi-bar{flex-wrap:wrap;}.form-grid{grid-template-columns:1fr;}.detail-grid{grid-template-columns:1fr;}}
-@media(max-width:500px){.kanban-board{grid-template-columns:1fr;}.table-wrap,.toolbar{padding-left:12px;padding-right:12px;}}
+::-webkit-scrollbar-track{background:#F4F4F4;}
+::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:#999;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){.kpi-bar{grid-template-columns:repeat(4,1fr);}.kanban-board{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.form-grid{grid-template-columns:1fr;}.detail-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){.kpi-bar{grid-template-columns:repeat(2,1fr);}.kanban-board{grid-template-columns:1fr;}.table-wrap,.toolbar,.tabs{padding-left:14px;padding-right:14px;}}
 </style>
 </head>
 <body>
 
+<!-- ── LOGIN ── -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-logo">⚡</div>
-    <h2>Solarity BESS Tracker</h2>
+    <div class="login-logo">
+      <svg viewBox="0 0 230 52" xmlns="http://www.w3.org/2000/svg" height="44" style="margin:0 auto;display:block;">
+        <defs>
+          <linearGradient id="hg1" x1="10%" y1="0%" x2="90%" y2="100%">
+            <stop offset="0%" stop-color="#8B1914"/>
+            <stop offset="30%" stop-color="#C41E1A"/>
+            <stop offset="65%" stop-color="#E84D18"/>
+            <stop offset="100%" stop-color="#FFC000"/>
+          </linearGradient>
+          <clipPath id="hClip"><polygon points="16,4 40,4 52,26 40,48 16,48 4,26"/></clipPath>
+        </defs>
+        <polygon points="16,4 40,4 52,26 40,48 16,48 4,26" fill="url(#hg1)"/>
+        <g clip-path="url(#hClip)">
+          <path d="M 4,43 Q 28,26 52,9" stroke="white" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.95"/>
+          <path d="M 4,30 Q 24,15 45,3" stroke="white" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.65"/>
+          <path d="M 9,49 Q 32,35 53,21" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.45"/>
+        </g>
+        <text x="63" y="36" fill="#262626" font-family="'Montserrat','Segoe UI',Arial,sans-serif" font-weight="800" font-size="27" letter-spacing="-0.3">solarity</text>
+      </svg>
+    </div>
+    <h2>Tracker BESS</h2>
     <p>Acceso exclusivo equipo comercial</p>
-    <input type="text"     id="loginUser" placeholder="Usuario" autocomplete="username"/>
+    <input type="text" id="loginUser" placeholder="Usuario" autocomplete="username"/>
     <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
     <button class="login-btn" onclick="doLogin()">Ingresar</button>
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
 
+<!-- ── APP ── -->
 <div id="app">
+
 <header>
-  <div>
-    <h1>⚡ Tracker de Oportunidades BESS</h1>
-    <span>Solarity Energía — Uso exclusivo equipo comercial</span>
+  <div class="header-left">
+    <svg viewBox="0 0 230 52" xmlns="http://www.w3.org/2000/svg" height="38" style="flex-shrink:0;">
+      <defs>
+        <linearGradient id="hg2" x1="10%" y1="0%" x2="90%" y2="100%">
+          <stop offset="0%" stop-color="#8B1914"/>
+          <stop offset="30%" stop-color="#C41E1A"/>
+          <stop offset="65%" stop-color="#E84D18"/>
+          <stop offset="100%" stop-color="#FFC000"/>
+        </linearGradient>
+        <clipPath id="hClip2"><polygon points="16,4 40,4 52,26 40,48 16,48 4,26"/></clipPath>
+      </defs>
+      <polygon points="16,4 40,4 52,26 40,48 16,48 4,26" fill="url(#hg2)"/>
+      <g clip-path="url(#hClip2)">
+        <path d="M 4,43 Q 28,26 52,9" stroke="white" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.95"/>
+        <path d="M 4,30 Q 24,15 45,3" stroke="white" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.65"/>
+        <path d="M 9,49 Q 32,35 53,21" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.45"/>
+      </g>
+      <text x="63" y="36" fill="white" font-family="'Montserrat','Segoe UI',Arial,sans-serif" font-weight="800" font-size="27" letter-spacing="-0.3">solarity</text>
+    </svg>
+    <div class="header-divider"></div>
+    <div class="header-titles">
+      <span class="header-subtitle">Equipo Comercial</span>
+      <span class="header-title-main">Tracker <span>BESS</span></span>
+    </div>
   </div>
   <div class="header-right">
-    <span id="dateLabel" style="color:#93C5FD;font-size:11px;"></span>
-    <span id="syncStatus" title="Sync con dashboard" style="font-size:11px;color:#93C5FD;cursor:pointer;" onclick="pickSyncFolder()">☁ Sin sync</span>
+    <span class="date-badge" id="dateLabel"></span>
+    <button class="sync-btn" id="syncStatus" onclick="pickSyncFolder()" title="Sync con carpeta local">☁ Sin sync</button>
     <button class="btn btn-primary" onclick="openModal()">+ Nueva Oportunidad</button>
     <button class="btn btn-logout" onclick="doLogout()">Cerrar sesión</button>
   </div>
 </header>
 
+<!-- KPI BAR -->
 <div class="kpi-bar">
-  <div class="kpi"><div class="kpi-val" id="kpi-total">0</div><div class="kpi-lbl">Total Oportunidades</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-total">0</div><div class="kpi-lbl">Total</div></div>
   <div class="kpi awarded"><div class="kpi-val" id="kpi-awarded">0</div><div class="kpi-lbl">Awarded</div></div>
   <div class="kpi midterm"><div class="kpi-val" id="kpi-midterm">0</div><div class="kpi-lbl">Mid Term</div></div>
   <div class="kpi shortterm"><div class="kpi-val" id="kpi-shortterm">0</div><div class="kpi-lbl">Short Term</div></div>
-  <div class="kpi"><div class="kpi-val" id="kpi-mwh">0 MWh</div><div class="kpi-lbl">MWh Pipeline</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-mwh">0</div><div class="kpi-lbl">MWh Pipeline</div></div>
   <div class="kpi"><div class="kpi-val" id="kpi-capex">$0M</div><div class="kpi-lbl">CAPEX Pipeline</div></div>
-  <div class="kpi"><div class="kpi-val" id="kpi-tir">—</div><div class="kpi-lbl">TIR Prom. Pond.</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-tir">—</div><div class="kpi-lbl">TIR Pond.</div></div>
 </div>
 
+<!-- TABS -->
 <div class="tabs">
-  <div class="tab active" id="tab-table"  onclick="switchTab('table')">📋 Tabla</div>
-  <div class="tab"        id="tab-kanban" onclick="switchTab('kanban')">🗂 Tablero Pipeline</div>
+  <div class="tab active" id="tab-table" onclick="switchTab('table')">📋 Tabla</div>
+  <div class="tab" id="tab-kanban" onclick="switchTab('kanban')">🗂 Tablero Pipeline</div>
 </div>
 
+<!-- TOOLBAR -->
 <div class="toolbar" id="toolbarEl">
   <input type="text" id="searchInput" placeholder="🔍  Buscar empresa, oportunidad, RM..." oninput="renderTable()"/>
   <div class="filter-group">
-    <button class="filter-btn active"      onclick="setFilter('all',this)">Todos</button>
-    <button class="filter-btn shortterm"   onclick="setFilter('Short Term',this)">Short Term</button>
-    <button class="filter-btn midterm"     onclick="setFilter('Mid Term',this)">Mid Term</button>
-    <button class="filter-btn awarded"     onclick="setFilter('Awarded',this)">Awarded</button>
-    <button class="filter-btn perdida"     onclick="setFilter('Perdida',this)">Perdida</button>
+    <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+    <button class="filter-btn shortterm" onclick="setFilter('Short Term',this)">Short Term</button>
+    <button class="filter-btn midterm" onclick="setFilter('Mid Term',this)">Mid Term</button>
+    <button class="filter-btn awarded" onclick="setFilter('Awarded',this)">Awardedon>
+    <button class="filter-btn perdida" onclick="setFilter('Perdida',this)">Perdida</button>
   </div>
   <div class="toolbar-right">
     <button class="btn btn-export" onclick="exportCSV()">↓ Exportar CSV</button>
   </div>
 </div>
 
+<!-- TABLE VIEW -->
 <div class="table-wrap" id="tableView">
   <table>
     <thead><tr>
@@ -230,6 +306,7 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
   </table>
 </div>
 
+<!-- KANBAN VIEW -->
 <div id="kanbanView">
   <div class="kanban-board">
     <div class="kanban-col">
@@ -262,13 +339,14 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
     </div>
   </div>
 </div>
-</div>
+
+</div><!-- /app -->
 
 <!-- DETAIL MODAL -->
 <div class="detail-backdrop" id="detailBackdrop">
   <div class="detail-modal">
     <div class="detail-header">
-      <div><h2 id="d-oportunidad"></h2><div style="margin-top:4px;" id="d-badge"></div></div>
+      <div><h2 id="d-oportunidad"></h2><div style="margin-top:6px;" id="d-badge"></div></div>
       <button class="detail-close" onclick="closeDetail()">✕</button>
     </div>
     <div class="detail-body">
@@ -306,9 +384,20 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
       <form id="oppForm" onsubmit="saveOpp(event)">
         <div class="form-grid">
           <div class="form-group"><label>R.M. *</label>
-            <select id="f-rm" required><option value="">Seleccionar...</option>
-              <option>Alfonso Salazar</option><option>Antonia Vial</option><option>Clemente Alessandri</option><option>Javiera Beiza</option><option>Jose Carvallo</option><option>José Pablo Kemp</option><option>Juan Pablo Varela</option><option>Lucas Soulodre</option><option>Rafael Brito</option><option>Valentina Vasquez</option>
-            </select></div>
+            <select id="f-rm" required>
+              <option value="">Seleccionar...</option>
+              <option>Alfonso Salazar</option>
+              <option>Antonia Vial</option>
+              <option>Clemente Alessandri</option>
+              <option>Javiera Beiza</option>
+              <option>Jose Carvallo</option>
+              <option>José Pablo Kemp</option>
+              <option>Juan Pablo Varela</option>
+              <option>Lucas Soulodre</option>
+              <option>Rafael Brito</option>
+              <option>Valentina Vasquez</option>
+            </select>
+          </div>
           <div class="form-group"><label>Empresa *</label><input type="text" id="f-empresa" placeholder="Nombre del cliente" required/></div>
           <div class="form-group full"><label>Nombre Oportunidad BESS *</label><input type="text" id="f-oportunidad" placeholder="Ej: BESS 20 MWh Collahuasi" required/></div>
           <div class="form-group"><label>Capacidad (MWh) *</label><input type="number" id="f-capacidad" placeholder="0" min="0" step="0.1" required/></div>
@@ -318,9 +407,19 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
           <div class="form-group"><label>Cuota (USD/Mes)</label><input type="number" id="f-cuota" placeholder="0" min="0" step="1"/></div>
           <div class="form-group"><label>Años de Contrato</label><input type="number" id="f-anios" placeholder="0" min="0" step="1"/></div>
           <div class="form-group"><label>Probabilidad (%)</label>
-            <select id="f-probabilidad"><option value="">—</option><option>10%</option><option>25%</option><option>50%</option><option>75%</option><option>90%</option><option>100%</option></select></div>
+            <select id="f-probabilidad">
+              <option value="">—</option>
+              <option>10%</option><option>25%</option><option>50%</option>
+              <option>75%</option><option>90%</option><option>100%</option>
+            </select>
+          </div>
           <div class="form-group"><label>Status Pipeline *</label>
-            <select id="f-status" required><option value="">Seleccionar...</option><option>Short Term</option><option>Mid Term</option><option>Awarded</option><option>Perdida</option></select></div>
+            <select id="f-status" required>
+              <option value="">Seleccionar...</option>
+              <option>Short Term</option><option>Mid Term</option>
+              <option>Awarded</option><option>Perdida</option>
+            </select>
+          </div>
           <div class="form-group"></div>
           <div class="form-group"><label>Fecha Upside</label><input type="date" id="f-fechaUpside"/></div>
           <div class="form-group"><label>Fecha Downside</label><input type="date" id="f-fechaDownside"/></div>
@@ -336,7 +435,7 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
   </div>
 </div>
 
-<!-- CONFIRM -->
+<!-- CONFIRM DELETE -->
 <div class="confirm-backdrop" id="confirmBackdrop">
   <div class="confirm-box">
     <h3>¿Eliminar oportunidad?</h3>
@@ -349,297 +448,353 @@ label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;
 </div>
 
 <script>
-const CREDS={user:'Solaritybess',pass:'2026'};
-function doLogin(){
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value;
-  if(u===CREDS.user&&p===CREDS.pass){
-    sessionStorage.setItem('bess_auth','1');
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('app').style.display='block';
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+var CREDS = {user:'Solaritybess', pass:'2026'};
+
+function doLogin() {
+  var u = document.getElementById('loginUser').value.trim();
+  var p = document.getElementById('loginPass').value;
+  if (u === CREDS.user && p === CREDS.pass) {
+    sessionStorage.setItem('bess_auth', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
     init();
-  }else{
-    document.getElementById('loginError').textContent='Usuario o contraseña incorrectos.';
-    document.getElementById('loginPass').value='';
+  } else {
+    document.getElementById('loginError').textContent = 'Usuario o contrasena incorrectos.';
+    document.getElementById('loginPass').value = '';
     document.getElementById('loginPass').focus();
   }
 }
-function doLogout(){sessionStorage.removeItem('bess_auth');location.reload();}
-if(sessionStorage.getItem('bess_auth')==='1'){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').style.display='block';
+
+function doLogout() {
+  sessionStorage.removeItem('bess_auth');
+  location.reload();
 }
 
-let data=JSON.parse(localStorage.getItem('bess_tracker')||'[]');
-if(data.length===0){
-  data=[
-    {id:uid(),rm:'Alfonso Salazar',empresa:'Minera Collahuasi', oportunidad:'BESS 20 MWh Collahuasi', capacidad:20,potencia:10,capex:175,tir:12,cuota:85000, anios:15,probabilidad:'75%',status:'Mid Term',  fechaUpside:'2026-06-30',fechaDownside:'2026-09-30',comentarios:'Proyecto piloto"},
-    {id:uid(),rm:'RM 2',           empresa:'ENAP Refinerías',   oportunidad:'BESS 50 MWh ENAP Biobío',capacidad:50,potencia:25,capex:170,tir:14,cuota:210000,anios:20,probabilidad:'50%',status:'Short Term',fechaUpside:'2026-05-15',fechaDownside:'2026-08-15',comentarios:'Segunda etapa proyecto solar'},
-    {id:uid(),rm:'Alfonso Salazar',empresa:'Aguas Andinas',      oportunidad:'BESS 10 MWh Lo Castillo',capacidad:10,potencia:5, capex:180,tir:13,cuota:42000, anios:10,probabilidad:'25%',status:'Awarded',   fechaUpside:'2026-04-30',fechaDownside:'2026-07-31',comentarios:'Requiere revisión técnica'},
+// Auto-login if session active — must call init() here too
+if (sessionStorage.getItem('bess_auth') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+// ── DATA ──────────────────────────────────────────────────────────────────────
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+var data = JSON.parse(localStorage.getItem('bess_tracker') || '[]');
+if (data.length === 0) {
+  data = [
+    {id:uid(), rm:'Alfonso Salazar', empresa:'Minera Collahuasi', oportunidad:'BESS 20 MWh Collahuasi', capacidad:20, potencia:10, capex:175, tir:12, cuota:85000, anios:15, probabilidad:'75%', status:'Mid Term', fechaUpside:'2026-06-30', fechaDownside:'2026-09-30', comentarios:'Proyecto piloto'},
+    {id:uid(), rm:'Antonia Vial', empresa:'ENAP Refinerias', oportunidad:'BESS 50 MWh ENAP Biobio', capacidad:50, potencia:25, capex:170, tir:14, cuota:210000, anios:20, probabilidad:'50%', status:'Short Term', fechaUpside:'2026-05-15', fechaDownside:'2026-08-15', comentarios:'Segunda etapa proyecto solar'},
+    {id:uid(), rm:'Alfonso Salazar', empresa:'Aguas Andinas', oportunidad:'BESS 10 MWh Lo Castillo', capacidad:10, potencia:5, capex:180, tir:13, cuota:42000, anios:10, probabilidad:'25%', status:'Awarded', fechaUpside:'2026-04-30', fechaDownside:'2026-07-31', comentarios:'Requiere revision tecnica'}
   ];
   save();
 }
 
-let currentFilter='all',sortKey=null,sortDir=1,pendingDeleteId=null,currentView='table';
+var currentFilter = 'all', sortKey = null, sortDir = 1, pendingDeleteId = null, currentView = 'table';
 
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
-function save(){localStorage.setItem('bess_tracker',JSON.stringify(data));autoExportJSON();}
+function save() { localStorage.setItem('bess_tracker', JSON.stringify(data)); autoExportJSON(); }
 
-// ── JSON EXPORT al archivo bess_data.json (File System Access API) ───────────
-const _IDB_NAME='bessExportDB',_IDB_STORE='handles';
-var _fsDirHandle=null;
+// ── FILE SYSTEM SYNC ──────────────────────────────────────────────────────────
+var _IDB_NAME = 'bessExportDB', _IDB_STORE = 'handles', _fsDirHandle = null;
 
-function _openIDB(){
-  return new Promise((res,rej)=>{
-    const r=indexedDB.open(_IDB_NAME,1);
-    r.onupgradeneeded=e=>e.target.result.createObjectStore(_IDB_STORE);
-    r.onsuccess=e=>res(e.target.result);
-    r.onerror=rej;
+function _openIDB() {
+  return new Promise(function(res, rej) {
+    var r = indexedDB.open(_IDB_NAME, 1);
+    r.onupgradeneeded = function(e) { e.target.result.createObjectStore(_IDB_STORE); };
+    r.onsuccess = function(e) { res(e.target.result); };
+    r.onerror = rej;
   });
 }
-async function _getHandle(){
-  const db=await _openIDB();
-  return new Promise(r=>{
-    const req=db.transaction(_IDB_STORE,'readonly').objectStore(_IDB_STORE).get('dir');
-    req.onsuccess=e=>r(e.target.result||null);
-    req.onerror=()=>r(null);
+async function _getHandle() {
+  var db = await _openIDB();
+  return new Promise(function(r) {
+    var req = db.transaction(_IDB_STORE, 'readonly').objectStore(_IDB_STORE).get('dir');
+    req.onsuccess = function(e) { r(e.target.result || null); };
+    req.onerror = function() { r(null); };
   });
 }
-async function _storeHandle(h){
-  const db=await _openIDB();
-  return new Promise(r=>{
-    const tx=db.transaction(_IDB_STORE,'readwrite');
-    tx.objectStore(_IDB_STORE).put(h,'dir');
-    tx.oncomplete=r;
+async function _storeHandle(h) {
+  var db = await _openIDB();
+  return new Promise(function(r) {
+    var tx = db.transaction(_IDB_STORE, 'readwrite');
+    tx.objectStore(_IDB_STORE).put(h, 'dir');
+    tx.oncomplete = r;
   });
 }
-function _setSyncStatus(ok,msg){
-  const el=document.getElementById('syncStatus');
-  if(!el)return;
-  el.textContent=msg;
-  el.style.color=ok?'#6EE7B7':'#FCA5A5';
+function _setSyncStatus(ok, msg) {
+  var el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = ok ? '#F5C713' : 'rgba(255,255,255,0.5)';
 }
-async function pickSyncFolder(){
-  try{
-    _fsDirHandle=await window.showDirectoryPicker({mode:'readwrite'});
+async function pickSyncFolder() {
+  try {
+    _fsDirHandle = await window.showDirectoryPicker({mode:'readwrite'});
     await _storeHandle(_fsDirHandle);
-    _setSyncStatus(true,'✅ Carpeta seleccionada');
+    _setSyncStatus(true, 'Carpeta seleccionada');
     await autoExportJSON();
-  }catch(e){
-    if(e.name!=='AbortError')_setSyncStatus(false,'⚠️ Sin sync');
+  } catch(e) {
+    if (e.name !== 'AbortError') _setSyncStatus(false, 'Sin sync');
   }
 }
-async function autoExportJSON(){
-  try{
-    if(!_fsDirHandle)_fsDirHandle=await _getHandle();
-    if(!_fsDirHandle){_setSyncStatus(false,'☁ Sin sync — click para configurar');return;}
-    const perm=await _fsDirHandle.queryPermission({mode:'readwrite'});
-    if(perm!=='granted'){
-      const req=await _fsDirHandle.requestPermission({mode:'readwrite'});
-      if(req!=='granted'){_setSyncStatus(false,'⚠️ Permiso denegado');return;}
+async function autoExportJSON() {
+  try {
+    if (!_fsDirHandle) _fsDirHandle = await _getHandle();
+    if (!_fsDirHandle) { _setSyncStatus(false, 'Sin sync — click para configurar'); return; }
+    var perm = await _fsDirHandle.queryPermission({mode:'readwrite'});
+    if (perm !== 'granted') {
+      var req = await _fsDirHandle.requestPermission({mode:'readwrite'});
+      if (req !== 'granted') { _setSyncStatus(false, 'Permiso denegado'); return; }
     }
-    const fh=await _fsDirHandle.getFileHandle('bess_data.json',{create:true});
-    const w=await fh.createWritable();
-    await w.write(JSON.stringify(data,null,2));
+    var fh = await _fsDirHandle.getFileHandle('bess_data.json', {create:true});
+    var w = await fh.createWritable();
+    await w.write(JSON.stringify(data, null, 2));
     await w.close();
-    const now=new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
-    _setSyncStatus(true,'✅ Sync '+now);
-  }catch(e){
-    console.warn('BESS export:',e.message);
-    _setSyncStatus(false,'⚠️ Error sync');
+    var now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
+    _setSyncStatus(true, 'Sync ' + now);
+  } catch(e) {
+    console.warn('BESS export:', e.message);
+    _setSyncStatus(false, 'Error sync');
   }
 }
-// Intentar restaurar handle guardado al iniciar
-(async()=>{
-  try{
-    const h=await _getHandle();
-    if(h){_fsDirHandle=h;await autoExportJSON();}
-    else{_setSyncStatus(false,'☁ Sin sync — click para configurar');}
-  }catch(_){}
+(async function() {
+  try {
+    var h = await _getHandle();
+    if (h) { _fsDirHandle = h; await autoExportJSON(); }
+    else { _setSyncStatus(false, 'Sin sync — click para configurar'); }
+  } catch(_) {}
 })();
-function fmt(n){return(n!=null&&n!=='')?Number(n).toLocaleString('es-CL'):'—';}
-function fmtUSD(n){if(n==null||n==='')return'—';return'$'+Number(n).toLocaleString('es-CL');}
-function fmtPct(n){return(n!=null&&n!=='')?Number(n).toFixed(1)+'%':'—';}
-function fmtDate(d){if(!d)return'—';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`;}
-function today(){return new Date().toISOString().slice(0,10);}
 
-function switchTab(view){
-  currentView=view;
-  document.getElementById('tab-table').classList.toggle('active',view==='table');
-  document.getElementById('tab-kanban').classList.toggle('active',view==='kanban');
-  document.getElementById('tableView').style.display=view==='table'?'':'none';
-  document.getElementById('toolbarEl').style.display=view==='table'?'':'none';
-  document.getElementById('kanbanView').style.display=view==='kanban'?'':'none';
-  if(view==='kanban')renderKanban();else renderTable();
+// ── FORMAT HELPERS ─────────────────────────────────────────────────────────────
+function fmt(n) { return (n != null && n !== '') ? Number(n).toLocaleString('es-CL') : '—'; }
+function fmtUSD(n) { if (n == null || n === '') return '—'; return '$' + Number(n).toLocaleString('es-CL'); }
+function fmtPct(n) { return (n != null && n !== '') ? Number(n).toFixed(1) + '%' : '—'; }
+function fmtDate(d) { if (!d) return '—'; var p = d.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+function today() { return new Date().toISOString().slice(0, 10); }
+
+// ── VIEWS ─────────────────────────────────────────────────────────────────────
+function switchTab(view) {
+  currentView = view;
+  document.getElementById('tab-table').classList.toggle('active', view === 'table');
+  document.getElementById('tab-kanban').classList.toggle('active', view === 'kanban');
+  document.getElementById('tableView').style.display = view === 'table' ? '' : 'none';
+  document.getElementById('toolbarEl').style.display = view === 'table' ? '' : 'none';
+  document.getElementById('kanbanView').style.display = view === 'kanban' ? '' : 'none';
+  if (view === 'kanban') renderKanban(); else renderTable();
 }
 
-function renderTable(){
-  const q=(document.getElementById('searchInput').value||'').toLowerCase();
-  let rows=data.filter(r=>{
-    const match=currentFilter==='all'||r.status===currentFilter;
-    const search=!q||[r.rm,r.empresa,r.oportunidad,r.comentarios].some(v=>(v||'').toLowerCase().includes(q));
-    return match&&search;
+function renderTable() {
+  var q = (document.getElementById('searchInput').value || '').toLowerCase();
+  var rows = data.filter(function(r) {
+    var match = currentFilter === 'all' || r.status === currentFilter;
+    var search = !q || [r.rm, r.empresa, r.oportunidad, r.comentarios].some(function(v) { return (v||'').toLowerCase().indexOf(q) >= 0; });
+    return match && search;
   });
-  if(sortKey)rows.sort((a,b)=>{
-    let av=a[sortKey]??'',bv=b[sortKey]??'';
-    if(!isNaN(parseFloat(av))&&!isNaN(parseFloat(bv))){av=parseFloat(av);bv=parseFloat(bv);}
-    return av<bv?-sortDir:av>bv?sortDir:0;
+  if (sortKey) rows.sort(function(a, b) {
+    var av = a[sortKey] != null ? a[sortKey] : '', bv = b[sortKey] != null ? b[sortKey] : '';
+    if (!isNaN(parseFloat(av)) && !isNaN(parseFloat(bv))) { av = parseFloat(av); bv = parseFloat(bv); }
+    return av < bv ? -sortDir : av > bv ? sortDir : 0;
   });
-  const tbody=document.getElementById('tableBody');
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="16"><div class="empty"><div class="empty-icon">📋</div>Sin oportunidades en este filtro.</div></td></tr>`;updateKPIs();return;}
-  const bmap={awarded:'badge-awarded',midterm:'badge-midterm',shortterm:'badge-shortterm',perdida:'badge-perdida'};
-  tbody.innerHTML=rows.map(r=>{
-    const ct=(r.capacidad&&r.capex)?r.capacidad*1000*r.capex:null;
-    const sk=(r.status||'').toLowerCase().replace(' ','');
-    return`<tr>
-      <td>${r.rm||'—'}</td>
-      <td class="td-left"><strong>${r.empresa||'—'}</strong></td>
-      <td class="td-left">${r.oportunidad||'—'}</td>
-      <td>${fmt(r.capacidad)}</td><td>${fmt(r.potencia)}</td>
-      <td>${fmtUSD(r.capex)}</td><td>${ct?fmtUSD(ct):'—'}</td>
-      <td>${fmtPct(r.tir)}</td><td>${fmtUSD(r.cuota)}</td>
-      <td>${r.anios||'—'}</td><td>${r.probabilidad||'—'}</td>
-      <td><span class="badge ${bmap[sk]||''}">${r.status||'—'}</span></td>
-      <td>${fmtDate(r.fechaUpside)}</td><td>${fmtDate(r.fechaDownside)}</td>
-      <td class="td-comment" title="${(r.comentarios||'').replace(/"/g,'&quot;')}">${r.comentarios||'—'}</td>
-      <td>
-        <button class="btn-icon" onclick="editOpp('${r.id}')">✏️</button>
-        <button class="btn-icon" onclick="confirmDelete('${r.id}')">🗑️</button>
-      </td></tr>`;
+  var tbody = document.getElementById('tableBody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="16"><div class="empty"><div class="empty-icon">📋</div>Sin oportunidades en este filtro.</div></td></tr>';
+    updateKPIs(); return;
+  }
+  var bmap = {awarded:'badge-awarded', midterm:'badge-midterm', shortterm:'badge-shortterm', perdida:'badge-perdida'};
+  tbody.innerHTML = rows.map(function(r) {
+    var ct = (r.capacidad && r.capex) ? r.capacidad * 1000 * r.capex : null;
+    var sk = (r.status || '').toLowerCase().replace(' ', '');
+    var comm = (r.comentarios || '').replace(/"/g, '&quot;');
+    return '<tr>'
+      + '<td>' + (r.rm||'—') + '</td>'
+      + '<td class="td-left"><strong>' + (r.empresa||'—') + '</strong></td>'
+      + '<td class="td-left">' + (r.oportunidad||'—') + '</td>'
+      + '<td>' + fmt(r.capacidad) + '</td>'
+      + '<td>' + fmt(r.potencia) + '</td>'
+      + '<td>' + fmtUSD(r.capex) + '</td>'
+      + '<td>' + (ct ? fmtUSD(ct) : '—') + '</td>'
+      + '<td>' + fmtPct(r.tir) + '</td>'
+      + '<td>' + fmtUSD(r.cuota) + '</td>'
+      + '<td>' + (r.anios||'—') + '</td>'
+      + '<td>' + (r.probabilidad||'—') + '</td>'
+      + '<td><span class="badge ' + (bmap[sk]||'') + '">' + (r.status||'—') + '</span></td>'
+      + '<td>' + fmtDate(r.fechaUpside) + '</td>'
+      + '<td>' + fmtDate(r.fechaDownside) + '</td>'
+      + '<td class="td-comment" title="' + comm + '">' + (r.comentarios||'—') + '</td>'
+      + '<td>'
+        + '<button class="btn-icon" onclick="showDetail(\'' + r.id + '\')" title="Ver detalle">🔍</button>'
+        + '<button class="btn-icon" onclick="editOpp(\'' + r.id + '\')" title="Editar">✏️</button>'
+        + '<button class="btn-icon" onclick="confirmDelete(\'' + r.id + '\')" title="Eliminar">🗑️</button>'
+      + '</td>'
+      + '</tr>';
   }).join('');
   updateKPIs();
 }
 
-const STATUS_COLS=[{key:'Short Term',id:'shortterm'},{key:'Mid Term',id:'midterm'},{key:'Awarded',id:'awarded'},{key:'Perdida',id:'perdida'}];
+var STATUS_COLS = [{key:'Short Term',id:'shortterm'},{key:'Mid Term',id:'midterm'},{key:'Awarded',id:'awarded'},{key:'Perdida',id:'perdida'}];
 
-function renderKanban(){
-  STATUS_COLS.forEach(({key,id})=>{
-    const rows=data.filter(r=>r.status===key);
-    const mwh=rows.reduce((s,r)=>s+(parseFloat(r.capacidad)||0),0);
-    const capex=rows.reduce((s,r)=>s+(parseFloat(r.capacidad)||0)*1000*(parseFloat(r.capex)||0),0);
-    document.getElementById('cnt-'+id).textContent=rows.length;
-    const mwhEl=document.getElementById('mwh-'+id);
-    mwhEl.innerHTML=rows.length?`<strong>${mwh.toLocaleString('es-CL')} MWh</strong> · CAPEX: <strong>$${(capex/1e6).toFixed(1)}M</strong>`:'';
-    const cardsEl=document.getElementById('cards-'+id);
-    if(!rows.length){cardsEl.innerHTML='<div class="kanban-empty">Sin proyectos en este stage</div>';return;}
-    cardsEl.innerHTML=rows.map(r=>{
-      const ct=(r.capacidad&&r.capex)?(r.capacidad*1000*r.capex):null;
-      return`<div class="kanban-card" onclick="showDetail('${r.id}')">
-        <div class="card-empresa">${r.empresa||'—'}</div>
-        <div class="card-oportunidad">${r.oportunidad||'—'}</div>
-        <div class="card-meta">
-          <span class="card-pill"><strong>${fmt(r.capacidad)}</strong> MWh</span>
-          ${r.tir?`<span class="card-pill">TIR <strong>${fmtPct(r.tir)}</strong></span>`:''}
-          ${ct?`<span class="card-pill">$<strong>${(ct/1e6).toFixed(1)}M</strong></span>`:''}
-          ${r.probabilidad?`<span class="card-pill">Prob. <strong>${r.probabilidad}</strong></span>`:''}
-          <span class="card-pill">RM: <strong>${r.rm||'—'}</strong></span>
-        </div></div>`;
+function renderKanban() {
+  STATUS_COLS.forEach(function(sc) {
+    var rows = data.filter(function(r) { return r.status === sc.key; });
+    var mwh = rows.reduce(function(s,r) { return s + (parseFloat(r.capacidad)||0); }, 0);
+    var capex = rows.reduce(function(s,r) { return s + (parseFloat(r.capacidad)||0)*1000*(parseFloat(r.capex)||0); }, 0);
+    document.getElementById('cnt-' + sc.id).textContent = rows.length;
+    var mwhEl = document.getElementById('mwh-' + sc.id);
+    mwhEl.innerHTML = rows.length ? '<strong>' + mwh.toLocaleString('es-CL') + ' MWh</strong> · CAPEX: <strong>$' + (capex/1e6).toFixed(1) + 'M</strong>' : '';
+    var cardsEl = document.getElementById('cards-' + sc.id);
+    if (!rows.length) { cardsEl.innerHTML = '<div class="kanban-empty">Sin proyectos en este stage</div>'; return; }
+    cardsEl.innerHTML = rows.map(function(r) {
+      var ct = (r.capacidad && r.capex) ? (r.capacidad * 1000 * r.capex) : null;
+      return '<div class="kanban-card" onclick="showDetail(\'' + r.id + '\')">'
+        + '<div class="card-empresa">' + (r.empresa||'—') + '</div>'
+        + '<div class="card-oportunidad">' + (r.oportunidad||'—') + '</div>'
+        + '<div class="card-meta">'
+          + '<span class="card-pill"><strong>' + fmt(r.capacidad) + '</strong> MWh</span>'
+          + (r.tir ? '<span class="card-pill">TIR <strong>' + fmtPct(r.tir) + '</strong></span>' : '')
+          + (ct ? '<span class="card-pill">$<strong>' + (ct/1e6).toFixed(1) + 'M</strong></span>' : '')
+          + (r.probabilidad ? '<span class="card-pill">Prob. <strong>' + r.probabilidad + '</strong></span>' : '')
+          + '<span class="card-pill">RM: <strong>' + (r.rm||'—') + '</strong></span>'
+        + '</div></div>';
     }).join('');
   });
   updateKPIs();
 }
 
-function filterFromKanban(status){
+function filterFromKanban(status) {
   switchTab('table');
-  currentFilter=status;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.filter-btn').forEach(b=>{if(b.textContent.trim()===status)b.classList.add('active');});
+  currentFilter = status;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.filter-btn').forEach(function(b) { if (b.textContent.trim() === status) b.classList.add('active'); });
   renderTable();
 }
 
-function showDetail(id){
-  const r=data.find(x=>x.id===id);if(!r)return;
-  const ct=(r.capacidad&&r.capex)?r.capacidad*1000*r.capex:null;
-  const bmap={awarded:'badge-awarded',midterm:'badge-midterm',shortterm:'badge-shortterm',perdida:'badge-perdida'};
-  const sk=(r.status||'').toLowerCase().replace(' ','');
-  document.getElementById('d-oportunidad').textContent=r.oportunidad||'—';
-  document.getElementById('d-badge').innerHTML=`<span class="badge ${bmap[sk]||''}">${r.status||'—'}</span>`;
-  document.getElementById('d-rm').textContent=r.rm||'—';
-  document.getElementById('d-empresa').textContent=r.empresa||'—';
-  document.getElementById('d-capacidad').textContent=fmt(r.capacidad)+' MWh';
-  document.getElementById('d-potencia').textContent=r.potencia?fmt(r.potencia)+' MW':'—';
-  document.getElementById('d-capex').textContent=fmtUSD(r.capex);
-  document.getElementById('d-capexTotal').textContent=ct?fmtUSD(ct):'—';
-  document.getElementById('d-tir').textContent=fmtPct(r.tir);
-  document.getElementById('d-cuota').textContent=fmtUSD(r.cuota);
-  document.getElementById('d-anios').textContent=r.anios?r.anios+' años':'—';
-  document.getElementById('d-prob').textContent=r.probabilidad||'—';
-  document.getElementById('d-upside').textContent=fmtDate(r.fechaUpside);
-  document.getElementById('d-downside').textContent=fmtDate(r.fechaDownside);
-  document.getElementById('d-comentarios').textContent=r.comentarios||'—';
-  document.getElementById('d-editBtn').onclick=()=>{closeDetail();editOpp(id);};
+function showDetail(id) {
+  var r = data.find(function(x) { return x.id === id; }); if (!r) return;
+  var ct = (r.capacidad && r.capex) ? r.capacidad * 1000 * r.capex : null;
+  var bmap = {awarded:'badge-awarded', midterm:'badge-midterm', shortterm:'badge-shortterm', perdida:'badge-perdida'};
+  var sk = (r.status || '').toLowerCase().replace(' ', '');
+  document.getElementById('d-oportunidad').textContent = r.oportunidad || '—';
+  document.getElementById('d-badge').innerHTML = '<span class="badge ' + (bmap[sk]||'') + '">' + (r.status||'—') + '</span>';
+  document.getElementById('d-rm').textContent = r.rm || '—';
+  document.getElementById('d-empresa').textContent = r.empresa || '—';
+  document.getElementById('d-capacidad').textContent = fmt(r.capacidad) + ' MWh';
+  document.getElementById('d-potencia').textContent = r.potencia ? fmt(r.potencia) + ' MW' : '—';
+  document.getElementById('d-capex').textContent = fmtUSD(r.capex);
+  document.getElementById('d-capexTotal').textContent = ct ? fmtUSD(ct) : '—';
+  document.getElementById('d-tir').textContent = fmtPct(r.tir);
+  document.getElementById('d-cuota').textContent = fmtUSD(r.cuota);
+  document.getElementById('d-anios').textContent = r.anios ? r.anios + ' anos' : '—';
+  document.getElementById('d-prob').textContent = r.probabilidad || '—';
+  document.getElementById('d-upside').textContent = fmtDate(r.fechaUpside);
+  document.getElementById('d-downside').textContent = fmtDate(r.fechaDownside);
+  document.getElementById('d-comentarios').textContent = r.comentarios || '—';
+  document.getElementById('d-editBtn').onclick = function() { closeDetail(); editOpp(id); };
   document.getElementById('detailBackdrop').classList.add('open');
 }
-function closeDetail(){document.getElementById('detailBackdrop').classList.remove('open');}
+function closeDetail() { document.getElementById('detailBackdrop').classList.remove('open'); }
 
-function updateKPIs(){
-  const active=data.filter(r=>r.status!=='Perdida');
-  document.getElementById('kpi-total').textContent=data.length;
-  document.getElementById('kpi-awarded').textContent=data.filter(r=>r.status==='Awarded').length;
-  document.getElementById('kpi-midterm').textContent=data.filter(r=>r.status==='Mid Term').length;
-  document.getElementById('kpi-shortterm').textContent=data.filter(r=>r.status==='Short Term').length;
-  const mwh=active.reduce((s,r)=>s+(parseFloat(r.capacidad)||0),0);
-  document.getElementById('kpi-mwh').textContent=mwh.toLocaleString('es-CL')+' MWh';
-  const capex=active.reduce((s,r)=>s+(parseFloat(r.capacidad)||0)*1000*(parseFloat(r.capex)||0),0);
-  document.getElementById('kpi-capex').textContent='$'+(capex/1e6).toFixed(1)+'M';
-  const wN=active.reduce((s,r)=>s+(parseFloat(r.tir)||0)*(parseFloat(r.capacidad)||0),0);
-  const wD=active.reduce((s,r)=>s+(parseFloat(r.capacidad)||0),0);
-  document.getElementById('kpi-tir').textContent=wD>0?(wN/wD).toFixed(1)+'%':'—';
+function updateKPIs() {
+  var active = data.filter(function(r) { return r.status !== 'Perdida'; });
+  document.getElementById('kpi-total').textContent = data.length;
+  document.getElementById('kpi-awarded').textContent = data.filter(function(r) { return r.status === 'Awarded'; }).length;
+  document.getElementById('kpi-midterm').textContent = data.filter(function(r) { return r.status === 'Mid Term'; }).length;
+  document.getElementById('kpi-shortterm').textContent = data.filter(function(r) { return r.status === 'Short Term'; }).length;
+  var mwh = active.reduce(function(s,r) { return s + (parseFloat(r.capacidad)||0); }, 0);
+  document.getElementById('kpi-mwh').textContent = mwh.toLocaleString('es-CL') + ' MWh';
+  var capex = active.reduce(function(s,r) { return s + (parseFloat(r.capacidad)||0)*1000*(parseFloat(r.capex)||0); }, 0);
+  document.getElementById('kpi-capex').textContent = '$' + (capex/1e6).toFixed(1) + 'M';
+  var wN = active.reduce(function(s,r) { return s + (parseFloat(r.tir)||0)*(parseFloat(r.capacidad)||0); }, 0);
+  var wD = active.reduce(function(s,r) { return s + (parseFloat(r.capacidad)||0); }, 0);
+  document.getElementById('kpi-tir').textContent = wD > 0 ? (wN/wD).toFixed(1) + '%' : '—';
 }
 
-function sortBy(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}renderTable();}
-function setFilter(f,el){currentFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderTable();}
+function sortBy(k) { if (sortKey === k) sortDir *= -1; else { sortKey = k; sortDir = 1; } renderTable(); }
+function setFilter(f, el) { currentFilter = f; document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); }); el.classList.add('active'); renderTable(); }
 
-function openModal(id){
+function openModal(id) {
   document.getElementById('modalBackdrop').classList.add('open');
   document.getElementById('oppForm').reset();
-  document.getElementById('f-id').value='';
-  document.getElementById('modalTitle').textContent='Nueva Oportunidad BESS';
-  if(id){
-    const r=data.find(x=>x.id===id);if(!r)return;
-    document.getElementById('modalTitle').textContent='Editar Oportunidad';
-    ['id','rm','empresa','oportunidad','capacidad','potencia','capex','tir','cuota','anios','probabilidad','status','fechaUpside','fechaDownside','comentarios'].forEach(k=>{
-      const el=document.getElementById('f-'+k);if(el)el.value=r[k]||'';
+  document.getElementById('f-id').value = '';
+  document.getElementById('modalTitle').textContent = 'Nueva Oportunidad BESS';
+  if (id) {
+    var r = data.find(function(x) { return x.id === id; }); if (!r) return;
+    document.getElementById('modalTitle').textContent = 'Editar Oportunidad';
+    ['id','rm','empresa','oportunidad','capacidad','potencia','capex','tir','cuota','anios','probabilidad','status','fechaUpside','fechaDownside','comentarios'].forEach(function(k) {
+      var el = document.getElementById('f-' + k); if (el) el.value = r[k] || '';
     });
   }
 }
-function closeModal(){document.getElementById('modalBackdrop').classList.remove('open');}
-function editOpp(id){openModal(id);}
+function closeModal() { document.getElementById('modalBackdrop').classList.remove('open'); }
+function editOpp(id) { openModal(id); }
 
-function saveOpp(e){
+function saveOpp(e) {
   e.preventDefault();
-  const id=document.getElementById('f-id').value;
-  const obj={id:id||uid(),rm:document.getElementById('f-rm').value,empresa:document.getElementById('f-empresa').value,oportunidad:document.getElementById('f-oportunidad').value,capacidad:document.getElementById('f-capacidad').value,potencia:document.getElementById('f-potencia').value,capex:document.getElementById('f-capex').value,tir:document.getElementById('f-tir').value,cuota:document.getElementById('f-cuota').value,anios:document.getElementById('f-anios').value,probabilidad:document.getElementById('f-probabilidad').value,status:document.getElementById('f-status').value,fechaUpside:document.getElementById('f-fechaUpside').value,fechaDownside:document.getElementById('f-fechaDownside').value,comentarios:document.getElementById('f-comentarios').value};
-  if(id){const i=data.findIndex(x=>x.id===id);if(i>=0)data[i]=obj;}else data.push(obj);
-  save();closeModal();
-  if(currentView==='kanban')renderKanban();else renderTable();
+  var id = document.getElementById('f-id').value;
+  var obj = {
+    id: id || uid(),
+    rm: document.getElementById('f-rm').value,
+    empresa: document.getElementById('f-empresa').value,
+    oportunidad: document.getElementById('f-oportunidad').value,
+    capacidad: document.getElementById('f-capacidad').value,
+    potencia: document.getElementById('f-potencia').value,
+    capex: document.getElementById('f-capex').value,
+    tir: document.getElementById('f-tir').value,
+    cuota: document.getElementById('f-cuota').value,
+    anios: document.getElementById('f-anios').value,
+    probabilidad: document.getElementById('f-probabilidad').value,
+    status: document.getElementById('f-status').value,
+    fechaUpside: document.getElementById('f-fechaUpside').value,
+    fechaDownside: document.getElementById('f-fechaDownside').value,
+    comentarios: document.getElementById('f-comentarios').value
+  };
+  if (id) {
+    var i = data.findIndex(function(x) { return x.id === id; });
+    if (i >= 0) data[i] = obj;
+  } else {
+    data.push(obj);
+  }
+  save();
+  closeModal();
+  if (currentView === 'kanban') renderKanban(); else renderTable();
 }
 
-function confirmDelete(id){pendingDeleteId=id;document.getElementById('confirmBackdrop').classList.add('open');}
-function closeConfirm(){pendingDeleteId=null;document.getElementById('confirmBackdrop').classList.remove('open');}
-document.getElementById('confirmDeleteBtn').onclick=()=>{
-  if(pendingDeleteId){data=data.filter(x=>x.id!==pendingDeleteId);save();if(currentView==='kanban')renderKanban();else renderTable();}
+function confirmDelete(id) { pendingDeleteId = id; document.getElementById('confirmBackdrop').classList.add('open'); }
+function closeConfirm() { pendingDeleteId = null; document.getElementById('confirmBackdrop').classList.remove('open'); }
+document.getElementById('confirmDeleteBtn').onclick = function() {
+  if (pendingDeleteId) {
+    data = data.filter(function(x) { return x.id !== pendingDeleteId; });
+    save();
+    if (currentView === 'kanban') renderKanban(); else renderTable();
+  }
   closeConfirm();
 };
 
-function exportCSV(){
-  const headers=['R.M.','Empresa','Oportunidad BESS','Capacidad (MWh)','Potencia (MW)','CAPEX Unit. (USD/kWh)','CAPEX Total (USD)','TIR (%)','Cuota (USD/Mes)','Años Contrato','Probabilidad','Status Pipeline','Fecha Upside','Fecha Downside','Comentarios'];
-  const rows=data.map(r=>{const ct=(r.capacidad&&r.capex)?(parseFloat(r.capacidad)*1000*parseFloat(r.capex)).toFixed(0):'';return[r.rm,r.empresa,r.oportunidad,r.capacidad,r.potencia,r.capex,ct,r.tir,r.cuota,r.anios,r.probabilidad,r.status,r.fechaUpside,r.fechaDownside,r.comentarios].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(',');});
-  const csv='\uFEFF'+[headers.join(','),...rows].join('\n');
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');
-  a.href=url;a.download=`Pipeline_BESS_${today()}.csv`;a.click();URL.revokeObjectURL(url);
+function exportCSV() {
+  var headers = ['R.M.','Empresa','Oportunidad BESS','Capacidad (MWh)','Potencia (MW)','CAPEX Unit. (USD/kWh)','CAPEX Total (USD)','TIR (%)','Cuota (USD/Mes)','Anos Contrato','Probabilidad','Status Pipeline','Fecha Upside','Fecha Downside','Comentarios'];
+  var rows = data.map(function(r) {
+    var ct = (r.capacidad && r.capex) ? (parseFloat(r.capacidad)*1000*parseFloat(r.capex)).toFixed(0) : '';
+    return [r.rm, r.empresa, r.oportunidad, r.capacidad, r.potencia, r.capex, ct, r.tir, r.cuota, r.anios, r.probabilidad, r.status, r.fechaUpside, r.fechaDownside, r.comentarios]
+      .map(function(v) { return '"' + (v||'').toString().replace(/"/g, '""') + '"'; }).join(',');
+  });
+  var csv = '\uFEFF' + [headers.join(',')].concat(rows).join('\n');
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'Pipeline_BESS_' + today() + '.csv'; a.click();
+  URL.revokeObjectURL(url);
 }
 
-document.getElementById('modalBackdrop').addEventListener('click',e=>{if(e.target===document.getElementById('modalBackdrop'))closeModal();});
-document.getElementById('detailBackdrop').addEventListener('click',e=>{if(e.target===document.getElementById('detailBackdrop'))closeDetail();});
-document.getElementById('confirmBackdrop').addEventListener('click',e=>{if(e.target===document.getElementById('confirmBackdrop'))closeConfirm();});
+document.getElementById('modalBackdrop').addEventListener('click', function(e) { if (e.target === document.getElementById('modalBackdrop')) closeModal(); });
+document.getElementById('detailBackdrop').addEventListener('click', function(e) { if (e.target === document.getElementById('detailBackdrop')) closeDetail(); });
+document.getElementById('confirmBackdrop').addEventListener('click', function(e) { if (e.target === document.getElementById('confirmBackdrop')) closeConfirm(); });
 
-function init(){
-  document.getElementById('dateLabel').textContent=new Date().toLocaleDateString('es-CL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+function init() {
+  document.getElementById('dateLabel').textContent = new Date().toLocaleDateString('es-CL', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
   renderTable();
 }
-if(sessionStorage.getItem('bess_auth')==='1')init();
+
+// Start app if already authenticated
+if (sessionStorage.getItem('bess_auth') === '1') init();
 </script>
 </body>
 </html>
