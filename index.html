@@ -103,6 +103,15 @@ tr:hover td{background:#FFF9E6!important;}
 .badge-perdida{background:#FEE2E2;color:#991B1B;}
 .btn-icon{background:none;border:none;cursor:pointer;padding:3px 6px;border-radius:6px;font-size:14px;transition:background .15s;}
 .btn-icon:hover{background:#FFF3CD;}
+.fv-toggle-wrap{display:flex;align-items:center;gap:10px;margin-top:6px;}
+.fv-toggle-wrap input[type=checkbox]{display:none;}
+.fv-switch{width:42px;height:24px;background:#D8DCE6;border-radius:12px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.fv-switch::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.fv-toggle-wrap input:checked+.fv-switch{background:#F5C713;}
+.fv-toggle-wrap input:checked+.fv-switch::after{left:21px;}
+.fv-lbl{font-size:12px;color:#444;font-weight:600;}
+.fv-chip{display:inline-block;background:#FEF9C3;color:#854D0E;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;}
+.fv-chip-no{display:inline-block;background:#F3F4F6;color:#6B7280;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:600;}
 .empty{text-align:center;padding:60px;color:#888;}
 .empty-icon{font-size:48px;margin-bottom:12px;}
 
@@ -287,6 +296,7 @@ label{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-
     <thead><tr>
       <th onclick="sortBy('rm')">R.M. ↕</th>
       <th onclick="sortBy('empresa')">Empresa ↕</th>
+      <th onclick="sortBy('industria')">Industria ↕</th>
       <th onclick="sortBy('oportunidad')">Oportunidad BESS ↕</th>
       <th onclick="sortBy('capacidad')">Cap. (MWh) ↕</th>
       <th onclick="sortBy('potencia')">Pot. (MW) ↕</th>
@@ -297,6 +307,7 @@ label{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-
       <th onclick="sortBy('anios')">Años ↕</th>
       <th onclick="sortBy('probabilidad')">Prob. ↕</th>
       <th onclick="sortBy('status')">Status ↕</th>
+      <th onclick="sortBy('conFV')">FV ↕</th>
       <th onclick="sortBy('fechaUpside')">F. Upside ↕</th>
       <th onclick="sortBy('fechaDownside')">F. Downside ↕</th>
       <th>Comentarios</th>
@@ -353,6 +364,8 @@ label{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-
       <div class="detail-grid">
         <div class="detail-item"><span class="detail-lbl">R.M.</span><span class="detail-val" id="d-rm"></span></div>
         <div class="detail-item"><span class="detail-lbl">Empresa</span><span class="detail-val" id="d-empresa"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Industria</span><span class="detail-val" id="d-industria"></span></div>
+        <div class="detail-item"><span class="detail-lbl">Con FV</span><span class="detail-val" id="d-fv"></span></div>
         <div class="detail-item"><span class="detail-lbl">Capacidad</span><span class="detail-val" id="d-capacidad"></span></div>
         <div class="detail-item"><span class="detail-lbl">Potencia</span><span class="detail-val" id="d-potencia"></span></div>
         <div class="detail-item"><span class="detail-lbl">CAPEX Unit. (USD/kWh)</span><span class="detail-val" id="d-capex"></span></div>
@@ -399,6 +412,8 @@ label{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-
             </select>
           </div>
           <div class="form-group"><label>Empresa *</label><input type="text" id="f-empresa" placeholder="Nombre del cliente" required/></div>
+          
+          <div class="form-group"><label>Industria</label><select id="f-industria"><option value="">Seleccionar...</option><option>Acuícola</option><option>Aeronáutica</option><option>Agrícola</option><option>Aguas</option><option>Alimentos</option><option>Automovilística</option><option>Bebestibles</option><option>Bodegaje</option><option>Centro Deportivo</option><option>Combustibles</option><option>Educación</option><option>Farmacéutica</option><option>Forestal</option><option>Frigorífico</option><option>Gran Minería</option><option>Hostelería y Turismo</option><option>Imprenta</option><option>Industrial</option><option>Inmobiliaria</option><option>Lácteos</option><option>Logística</option><option>Manufactura</option><option>Pequeña / Mediana Minería</option><option>Pesquera</option><option>Reciclaje</option><option>Retail</option><option>Telecomunicaciones</option><option>Vidrios</option><option>Vitivinícola</option><option>Otra</option></select></div>
           <div class="form-group full"><label>Nombre Oportunidad BESS *</label><input type="text" id="f-oportunidad" placeholder="Ej: BESS 20 MWh Collahuasi" required/></div>
           <div class="form-group"><label>Capacidad (MWh) *</label><input type="number" id="f-capacidad" placeholder="0" min="0" step="0.1" required/></div>
           <div class="form-group"><label>Potencia (MW)</label><input type="number" id="f-potencia" placeholder="0" min="0" step="0.1"/></div>
@@ -420,6 +435,8 @@ label{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-
               <option>Awarded</option><option>Perdida</option>
             </select>
           </div>
+          
+          <div class="form-group"><label>¿Acompaña Fotovoltaico (FV)?</label><div class="fv-toggle-wrap"><input type="checkbox" id="f-conFV"/><label class="fv-switch" for="f-conFV"></label><span class="fv-lbl">☀️ Con FV</span></div></div>
           <div class="form-group"><label>Fecha Upside</label><input type="date" id="f-fechaUpside"/></div>
           <div class="form-group"><label>Fecha Downside</label><input type="date" id="f-fechaDownside"/></div>
           <div class="form-group full"><label>Comentarios</label><textarea id="f-comentarios" placeholder="Notas adicionales..."></textarea></div>
@@ -607,6 +624,7 @@ function renderTable() {
     return '<tr>'
       + '<td>' + (r.rm||'—') + '</td>'
       + '<td class="td-left"><strong>' + (r.empresa||'—') + '</strong></td>'
+      + '<td class="td-left">' + (r.industria||'—') + '</td>'
       + '<td class="td-left">' + (r.oportunidad||'—') + '</td>'
       + '<td>' + fmt(r.capacidad) + '</td>'
       + '<td>' + fmt(r.potencia) + '</td>'
@@ -617,6 +635,7 @@ function renderTable() {
       + '<td>' + (r.anios||'—') + '</td>'
       + '<td>' + (r.probabilidad||'—') + '</td>'
       + '<td><span class="badge ' + (bmap[sk]||'') + '">' + (r.status||'—') + '</span></td>'
+      + '<td>' + (r.conFV ? '<span class="fv-chip">☀️ FV</span>' : '<span class="fv-chip-no">No</span>') + '</td>'
       + '<td>' + fmtDate(r.fechaUpside) + '</td>'
       + '<td>' + fmtDate(r.fechaDownside) + '</td>'
       + '<td class="td-comment" title="' + comm + '">' + (r.comentarios||'—') + '</td>'
@@ -676,6 +695,8 @@ function showDetail(id) {
   document.getElementById('d-badge').innerHTML = '<span class="badge ' + (bmap[sk]||'') + '">' + (r.status||'—') + '</span>';
   document.getElementById('d-rm').textContent = r.rm || '—';
   document.getElementById('d-empresa').textContent = r.empresa || '—';
+  document.getElementById('d-industria').textContent = r.industria || '—';
+  document.getElementById('d-fv').innerHTML = r.conFV ? '<span class="fv-chip">☀️ Con Fotovoltaico</span>' : '<span class="fv-chip-no">Sin FV</span>';
   document.getElementById('d-capacidad').textContent = fmt(r.capacidad) + ' MWh';
   document.getElementById('d-potencia').textContent = r.potencia ? fmt(r.potencia) + ' MW' : '—';
   document.getElementById('d-capex').textContent = fmtUSD(r.capex);
@@ -718,9 +739,10 @@ function openModal(id) {
   if (id) {
     var r = data.find(function(x) { return x.id === id; }); if (!r) return;
     document.getElementById('modalTitle').textContent = 'Editar Oportunidad';
-    ['id','rm','empresa','oportunidad','capacidad','potencia','capex','tir','cuota','anios','probabilidad','status','fechaUpside','fechaDownside','comentarios'].forEach(function(k) {
+    ['id','rm','empresa','industria','oportunidad','capacidad','potencia','capex','tir','cuota','anios','probabilidad','status','fechaUpside','fechaDownside','comentarios'].forEach(function(k) {
       var el = document.getElementById('f-' + k); if (el) el.value = r[k] || '';
     });
+    document.getElementById('f-conFV').checked = !!r.conFV;
   }
 }
 function closeModal() { document.getElementById('modalBackdrop').classList.remove('open'); }
@@ -733,7 +755,9 @@ function saveOpp(e) {
     id: id || uid(),
     rm: document.getElementById('f-rm').value,
     empresa: document.getElementById('f-empresa').value,
+    industria: document.getElementById('f-industria').value,
     oportunidad: document.getElementById('f-oportunidad').value,
+    conFV: document.getElementById('f-conFV').checked,
     capacidad: document.getElementById('f-capacidad').value,
     potencia: document.getElementById('f-potencia').value,
     capex: document.getElementById('f-capex').value,
@@ -769,10 +793,10 @@ document.getElementById('confirmDeleteBtn').onclick = function() {
 };
 
 function exportCSV() {
-  var headers = ['R.M.','Empresa','Oportunidad BESS','Capacidad (MWh)','Potencia (MW)','CAPEX Unit. (USD/kWh)','CAPEX Total (USD)','TIR (%)','Cuota (USD/Mes)','Anos Contrato','Probabilidad','Status Pipeline','Fecha Upside','Fecha Downside','Comentarios'];
+  var headers = ['R.M.','Empresa','Industria','Oportunidad BESS','Con FV','Capacidad (MWh)','Potencia (MW)','CAPEX Unit. (USD/kWh)','CAPEX Total (USD)','TIR (%)','Cuota (USD/Mes)','Anos Contrato','Probabilidad','Status Pipeline','Fecha Upside','Fecha Downside','Comentarios'];
   var rows = data.map(function(r) {
     var ct = (r.capacidad && r.capex) ? (parseFloat(r.capacidad)*1000*parseFloat(r.capex)).toFixed(0) : '';
-    return [r.rm, r.empresa, r.oportunidad, r.capacidad, r.potencia, r.capex, ct, r.tir, r.cuota, r.anios, r.probabilidad, r.status, r.fechaUpside, r.fechaDownside, r.comentarios]
+    return [r.rm, r.empresa, r.industria||'', r.oportunidad, r.conFV?'Si':'No', r.capacidad, r.potencia, r.capex, ct, r.tir, r.cuota, r.anios, r.probabilidad, r.status, r.fechaUpside, r.fechaDownside, r.comentarios]
       .map(function(v) { return '"' + (v||'').toString().replace(/"/g, '""') + '"'; }).join(',');
   });
   var csv = '\uFEFF' + [headers.join(',')].concat(rows).join('\n');
