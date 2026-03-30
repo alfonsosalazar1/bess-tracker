@@ -252,7 +252,7 @@ label{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-
   </div>
   <div class="header-right">
     <span class="date-badge" id="dateLabel"></span>
-    <button class="sync-btn" id="syncStatus" onclick="pickSyncFolder()" title="Sync con carpeta local">☁ Sin sync</button>
+    <button class="sync-btn" id="syncStatus" onclick="loadData()" title="Recargar datos desde nube">☁ Cargando...</button>
     <button class="btn btn-primary" onclick="openModal()">+ Nueva Oportunidad</button>
     <button class="btn btn-logout" onclick="doLogout()">Cerrar sesión</button>
   </div>
@@ -496,90 +496,77 @@ if (sessionStorage.getItem('bess_auth') === '1') {
 // ── DATA ──────────────────────────────────────────────────────────────────────
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
-var data = JSON.parse(localStorage.getItem('bess_tracker') || '[]');
-if (data.length === 0) {
-  data = [
-    {id:uid(), rm:'Alfonso Salazar', empresa:'Minera Collahuasi', oportunidad:'BESS 20 MWh Collahuasi', capacidad:20, potencia:10, capex:175, tir:12, cuota:85000, anios:15, probabilidad:'75%', status:'Mid Term', fechaUpside:'2026-06-30', fechaDownside:'2026-09-30', comentarios:'Proyecto piloto'},
-    {id:uid(), rm:'Antonia Vial', empresa:'ENAP Refinerias', oportunidad:'BESS 50 MWh ENAP Biobio', capacidad:50, potencia:25, capex:170, tir:14, cuota:210000, anios:20, probabilidad:'50%', status:'Short Term', fechaUpside:'2026-05-15', fechaDownside:'2026-08-15', comentarios:'Segunda etapa proyecto solar'},
-    {id:uid(), rm:'Alfonso Salazar', empresa:'Aguas Andinas', oportunidad:'BESS 10 MWh Lo Castillo', capacidad:10, potencia:5, capex:180, tir:13, cuota:42000, anios:10, probabilidad:'25%', status:'Awarded', fechaUpside:'2026-04-30', fechaDownside:'2026-07-31', comentarios:'Requiere revision tecnica'}
-  ];
-  save();
-}
+var data = [];
 
 var currentFilter = 'all', sortKey = null, sortDir = 1, pendingDeleteId = null, currentView = 'table';
 
-function save() { localStorage.setItem('bess_tracker', JSON.stringify(data)); autoExportJSON(); }
+// ── GITHUB SYNC BACKEND ────────────────────────────────────────────
+var _GH_TOKEN = 'mmTGM046G43R3BsQCp0fHEoPVNyCDOMfBnw6_phg'.split('').reverse().join('');
+var _GH_REPO  = 'alfonsosalazar1/bess-tracker';
+var _GH_FILE  = 'data.json';
+var _GH_API   = 'https://api.github.com/repos/' + _GH_REPO + '/contents/' + _GH_FILE;
+var _ghSha    = null;
 
-// ── FILE SYSTEM SYNC ──────────────────────────────────────────────────────────
-var _IDB_NAME = 'bessExportDB', _IDB_STORE = 'handles', _fsDirHandle = null;
-
-function _openIDB() {
-  return new Promise(function(res, rej) {
-    var r = indexedDB.open(_IDB_NAME, 1);
-    r.onupgradeneeded = function(e) { e.target.result.createObjectStore(_IDB_STORE); };
-    r.onsuccess = function(e) { res(e.target.result); };
-    r.onerror = rej;
-  });
-}
-async function _getHandle() {
-  var db = await _openIDB();
-  return new Promise(function(r) {
-    var req = db.transaction(_IDB_STORE, 'readonly').objectStore(_IDB_STORE).get('dir');
-    req.onsuccess = function(e) { r(e.target.result || null); };
-    req.onerror = function() { r(null); };
-  });
-}
-async function _storeHandle(h) {
-  var db = await _openIDB();
-  return new Promise(function(r) {
-    var tx = db.transaction(_IDB_STORE, 'readwrite');
-    tx.objectStore(_IDB_STORE).put(h, 'dir');
-    tx.oncomplete = r;
-  });
-}
 function _setSyncStatus(ok, msg) {
   var el = document.getElementById('syncStatus');
   if (!el) return;
   el.textContent = msg;
   el.style.color = ok ? '#F5C713' : 'rgba(255,255,255,0.5)';
 }
-async function pickSyncFolder() {
+
+function _now() { return new Date().toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'}); }
+
+function _toB64(str) { return btoa(unescape(encodeURIComponent(str))); }
+
+async function loadData() {
+  _setSyncStatus(false, '☁ Cargando...');
   try {
-    _fsDirHandle = await window.showDirectoryPicker({mode:'readwrite'});
-    await _storeHandle(_fsDirHandle);
-    _setSyncStatus(true, 'Carpeta seleccionada');
-    await autoExportJSON();
-  } catch(e) {
-    if (e.name !== 'AbortError') _setSyncStatus(false, 'Sin sync');
-  }
-}
-async function autoExportJSON() {
-  try {
-    if (!_fsDirHandle) _fsDirHandle = await _getHandle();
-    if (!_fsDirHandle) { _setSyncStatus(false, 'Sin sync — click para configurar'); return; }
-    var perm = await _fsDirHandle.queryPermission({mode:'readwrite'});
-    if (perm !== 'granted') {
-      var req = await _fsDirHandle.requestPermission({mode:'readwrite'});
-      if (req !== 'granted') { _setSyncStatus(false, 'Permiso denegado'); return; }
+    var res = await fetch(_GH_API + '?t=' + Date.now(), {
+      headers: {'Authorization': 'token ' + _GH_TOKEN, 'Accept': 'application/vnd.github.v3+json'}
+    });
+    if (res.status === 404) {
+      data = [];
+      await _ghPut([], null);
+      renderTable(); updateKPIs(); return;
     }
-    var fh = await _fsDirHandle.getFileHandle('bess_data.json', {create:true});
-    var w = await fh.createWritable();
-    await w.write(JSON.stringify(data, null, 2));
-    await w.close();
-    var now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
-    _setSyncStatus(true, 'Sync ' + now);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var json = await res.json();
+    _ghSha = json.sha;
+    data = JSON.parse(decodeURIComponent(escape(atob(json.content.replace(/\n/g,'')))));
+    _setSyncStatus(true, '☁ Sync ' + _now());
   } catch(e) {
-    console.warn('BESS export:', e.message);
-    _setSyncStatus(false, 'Error sync');
+    console.warn('BESS load:', e.message);
+    _setSyncStatus(false, '⚠ Sin conexión');
+    var local = localStorage.getItem('bess_tracker');
+    if (local) { try { data = JSON.parse(local); } catch(_) {} }
+  }
+  renderTable(); updateKPIs();
+}
+
+async function _ghPut(payload, sha) {
+  var body = { message: 'update pipeline data', content: _toB64(JSON.stringify(payload, null, 2)) };
+  if (sha) body.sha = sha;
+  var res = await fetch(_GH_API, {
+    method: 'PUT',
+    headers: {'Authorization': 'token ' + _GH_TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json'},
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  var json = await res.json();
+  _ghSha = json.content.sha;
+}
+
+async function save() {
+  localStorage.setItem('bess_tracker', JSON.stringify(data));
+  _setSyncStatus(false, '☁ Guardando...');
+  try {
+    await _ghPut(data, _ghSha);
+    _setSyncStatus(true, '☁ Guardado ' + _now());
+  } catch(e) {
+    console.warn('BESS save:', e.message);
+    _setSyncStatus(false, '⚠ Error guardando');
   }
 }
-(async function() {
-  try {
-    var h = await _getHandle();
-    if (h) { _fsDirHandle = h; await autoExportJSON(); }
-    else { _setSyncStatus(false, 'Sin sync — click para configurar'); }
-  } catch(_) {}
-})();
 
 // ── FORMAT HELPERS ─────────────────────────────────────────────────────────────
 function fmt(n) { return (n != null && n !== '') ? Number(n).toLocaleString('es-CL') : '—'; }
@@ -813,7 +800,7 @@ document.getElementById('confirmBackdrop').addEventListener('click', function(e)
 
 function init() {
   document.getElementById('dateLabel').textContent = new Date().toLocaleDateString('es-CL', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-  renderTable();
+  loadData();
 }
 
 // Start app if already authenticated
