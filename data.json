@@ -55,5 +55,24 @@
     "fechaDownside": "2026-07-31",
     "comentarios": "Requiere revision tecnica",
     "conFV": false
+  },
+  {
+    "id": "mnd6bzcs260ltcgaqy8",
+    "rm": "Clemente Alessandri",
+    "empresa": "GARIBALDI",
+    "industria": "Industrial",
+    "oportunidad": "GARIBALDI BESS",
+    "conFV": true,
+    "capacidad": "5",
+    "potencia": "2",
+    "capex": "200",
+    "tir": "11.7",
+    "cuota": "11500",
+    "anios": "16",
+    "probabilidad": "50%",
+    "status": "Short Term",
+    "fechaUpside": "2026-05-01",
+    "fechaDownside": "2026-09-17",
+    "comentarios": "Hoy 30/03/26 reunión presencial con gerencia"
   }
 ]
