@@ -1,24 +1,5 @@
 [
   {
-    "id": "init01",
-    "rm": "Alfonso Salazar",
-    "empresa": "Minera Collahuasi",
-    "industria": "Gran Minería",
-    "oportunidad": "BESS 20 MWh Collahuasi",
-    "capacidad": 20,
-    "potencia": 10,
-    "capex": 175,
-    "tir": 12,
-    "cuota": 85000,
-    "anios": 15,
-    "probabilidad": "75%",
-    "status": "Mid Term",
-    "fechaUpside": "2026-06-30",
-    "fechaDownside": "2026-09-30",
-    "comentarios": "Proyecto piloto",
-    "conFV": false
-  },
-  {
     "id": "mnd6bzcs260ltcgaqy8",
     "rm": "Clemente Alessandri",
     "empresa": "GARIBALDI",
