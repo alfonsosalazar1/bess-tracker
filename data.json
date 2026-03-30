@@ -17,5 +17,24 @@
     "fechaUpside": "2026-05-01",
     "fechaDownside": "2026-09-17",
     "comentarios": "Hoy 30/03/26 reunión presencial con gerencia"
+  },
+  {
+    "id": "mndmecxcmoz647jeick",
+    "rm": "Lucas Soulodre",
+    "empresa": "CONCHA Y TORO ",
+    "industria": "Vitivinícola",
+    "oportunidad": "CYT KEULE ",
+    "conFV": true,
+    "capacidad": "1000",
+    "potencia": "500",
+    "capex": "200",
+    "tir": "11.7",
+    "cuota": "10000",
+    "anios": "16",
+    "probabilidad": "75%",
+    "status": "Awarded",
+    "fechaUpside": "2026-04-15",
+    "fechaDownside": "2026-04-30",
+    "comentarios": ""
   }
 ]
