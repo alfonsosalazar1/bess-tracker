@@ -19,25 +19,6 @@
     "conFV": false
   },
   {
-    "id": "init02",
-    "rm": "Antonia Vial",
-    "empresa": "ENAP Refinerias",
-    "industria": "Combustibles",
-    "oportunidad": "BESS 50 MWh ENAP Biobio",
-    "capacidad": 50,
-    "potencia": 25,
-    "capex": 170,
-    "tir": 14,
-    "cuota": 210000,
-    "anios": 20,
-    "probabilidad": "50%",
-    "status": "Short Term",
-    "fechaUpside": "2026-05-15",
-    "fechaDownside": "2026-08-15",
-    "comentarios": "Segunda etapa proyecto solar",
-    "conFV": true
-  },
-  {
     "id": "mnd6bzcs260ltcgaqy8",
     "rm": "Clemente Alessandri",
     "empresa": "GARIBALDI",
