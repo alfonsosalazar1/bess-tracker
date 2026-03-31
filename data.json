@@ -93,5 +93,24 @@
     "fechaUpside": "2026-04-30",
     "fechaDownside": "2026-05-30",
     "comentarios": "La tarifa no está actualizada, tome de referencia la última enviada a CyT mientras se actualiza la propuesta"
+  },
+  {
+    "id": "mneq62a4wjtygumikwo",
+    "rm": "Clemente Alessandri",
+    "empresa": "B.O PACKAGING",
+    "industria": "",
+    "oportunidad": "B.O PACKAGING",
+    "conFV": true,
+    "capacidad": "9",
+    "potencia": "4",
+    "capex": "234",
+    "tir": "11.7",
+    "cuota": "21500",
+    "anios": "16",
+    "probabilidad": "25%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-06-30",
+    "fechaDownside": "2026-10-30",
+    "comentarios": "Todavía no terminamos la evaluación, hay que actualizar la propuesta en unos días mas"
   }
 ]
