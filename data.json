@@ -36,5 +36,24 @@
     "fechaUpside": "2026-04-15",
     "fechaDownside": "2026-04-30",
     "comentarios": ""
+  },
+  {
+    "id": "mnepsgla0hct1ju0kt8r",
+    "rm": "Lucas Soulodre",
+    "empresa": "CONCHA Y TORO ",
+    "industria": "Vitivinícola",
+    "oportunidad": "CYT PIRQUE",
+    "conFV": false,
+    "capacidad": "5",
+    "potencia": "2.2",
+    "capex": "186",
+    "tir": "13.7",
+    "cuota": "12000",
+    "anios": "16",
+    "probabilidad": "75%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-04-30",
+    "fechaDownside": "2026-05-30",
+    "comentarios": "La tarifa no está actualizada, tome de referencia la última enviada a CyT mientras se actualiza la propuesta"
   }
 ]
