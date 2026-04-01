@@ -112,5 +112,24 @@
     "fechaUpside": "2026-06-30",
     "fechaDownside": "2026-10-30",
     "comentarios": "Todavía no terminamos la evaluación, hay que actualizar la propuesta en unos días mas"
+  },
+  {
+    "id": "mng562oftnaac9pmyc",
+    "rm": "Javiera Beiza",
+    "empresa": "Rheem",
+    "industria": "Industrial",
+    "oportunidad": "Rheem Maipu-  empalme 12632 y 12633",
+    "conFV": false,
+    "capacidad": "8.0",
+    "potencia": "",
+    "capex": "",
+    "tir": "",
+    "cuota": "",
+    "anios": "",
+    "probabilidad": "",
+    "status": "Mid Term",
+    "fechaUpside": "",
+    "fechaDownside": "",
+    "comentarios": ""
   }
 ]
