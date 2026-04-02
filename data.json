@@ -131,5 +131,24 @@
     "fechaUpside": "",
     "fechaDownside": "",
     "comentarios": ""
+  },
+  {
+    "id": "mnhgsqaui3v4zpph58s",
+    "rm": "Lucas Soulodre",
+    "empresa": "AGROSUPER",
+    "industria": "Alimentos",
+    "oportunidad": "LO MIRANDA",
+    "conFV": false,
+    "capacidad": "15",
+    "potencia": "3750",
+    "capex": "196",
+    "tir": "11.7",
+    "cuota": "45300",
+    "anios": "16",
+    "probabilidad": "50%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-08-31",
+    "fechaDownside": "2026-12-28",
+    "comentarios": ""
   }
 ]
