@@ -150,5 +150,24 @@
     "fechaUpside": "2026-08-31",
     "fechaDownside": "2026-12-28",
     "comentarios": ""
+  },
+  {
+    "id": "mnhgw1wgfoe4l2od237",
+    "rm": "Lucas Soulodre",
+    "empresa": "AGROSUPER",
+    "industria": "",
+    "oportunidad": "LA ESTRELLA",
+    "conFV": false,
+    "capacidad": "5",
+    "potencia": "1000",
+    "capex": "",
+    "tir": "11.7",
+    "cuota": "13700",
+    "anios": "16",
+    "probabilidad": "50%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-08-31",
+    "fechaDownside": "2026-12-28",
+    "comentarios": ""
   }
 ]
