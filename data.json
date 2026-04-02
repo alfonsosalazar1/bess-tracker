@@ -157,7 +157,7 @@
     "empresa": "AGROSUPER",
     "industria": "",
     "oportunidad": "LA ESTRELLA",
-    "conFV": false,
+    "conFV": true,
     "capacidad": "5",
     "potencia": "1000",
     "capex": "194",
