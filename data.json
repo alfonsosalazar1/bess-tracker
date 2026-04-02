@@ -138,7 +138,7 @@
     "empresa": "AGROSUPER",
     "industria": "Alimentos",
     "oportunidad": "LO MIRANDA",
-    "conFV": false,
+    "conFV": true,
     "capacidad": "15",
     "potencia": "3750",
     "capex": "196",
