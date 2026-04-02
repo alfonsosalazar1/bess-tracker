@@ -169,5 +169,24 @@
     "fechaUpside": "2026-08-31",
     "fechaDownside": "2026-12-28",
     "comentarios": ""
+  },
+  {
+    "id": "mnhh38hq6khfxc9kbqh",
+    "rm": "Lucas Soulodre",
+    "empresa": "MARINE FARM",
+    "industria": "Acuícola",
+    "oportunidad": "MARINE FARM",
+    "conFV": true,
+    "capacidad": "2.5",
+    "potencia": "1100",
+    "capex": "",
+    "tir": "11.7",
+    "cuota": "6072",
+    "anios": "16",
+    "probabilidad": "25%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-07-27",
+    "fechaDownside": "2026-09-30",
+    "comentarios": ""
   }
 ]
