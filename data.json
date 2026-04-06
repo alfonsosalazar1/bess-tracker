@@ -188,5 +188,24 @@
     "fechaUpside": "2026-07-27",
     "fechaDownside": "2026-09-30",
     "comentarios": ""
+  },
+  {
+    "id": "mnmi1elwtr0vnd3n7y",
+    "rm": "Valentina Vasquez",
+    "empresa": "Novofarma",
+    "industria": "Farmacéutica",
+    "oportunidad": "Novofarma ",
+    "conFV": true,
+    "capacidad": "5",
+    "potencia": "2",
+    "capex": "204",
+    "tir": "11.7",
+    "cuota": "20700",
+    "anios": "8",
+    "probabilidad": "25%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-05-29",
+    "fechaDownside": "2026-06-30",
+    "comentarios": ""
   }
 ]
