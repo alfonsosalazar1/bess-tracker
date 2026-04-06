@@ -226,5 +226,24 @@
     "fechaUpside": "2026-10-30",
     "fechaDownside": "2026-11-30",
     "comentarios": ""
+  },
+  {
+    "id": "mnmiewaf3q1kh4begru",
+    "rm": "Javiera Beiza",
+    "empresa": "MINERA LAS CENIZAS",
+    "industria": "Pequeña / Mediana Minería",
+    "oportunidad": "MINERA LAS CENIZAS PLANTA LAS LUCES Y POX",
+    "conFV": false,
+    "capacidad": "45",
+    "potencia": "",
+    "capex": "",
+    "tir": "",
+    "cuota": "",
+    "anios": "",
+    "probabilidad": "",
+    "status": "Mid Term",
+    "fechaUpside": "",
+    "fechaDownside": "",
+    "comentarios": ""
   }
 ]
