@@ -207,5 +207,24 @@
     "fechaUpside": "2026-05-29",
     "fechaDownside": "2026-06-30",
     "comentarios": ""
+  },
+  {
+    "id": "mnmidi2o5zfye0fjbg9",
+    "rm": "Valentina Vasquez",
+    "empresa": "AGUAS ANDINAS",
+    "industria": "Aguas",
+    "oportunidad": "AGUAS ANDINA LA FARFANA",
+    "conFV": true,
+    "capacidad": "40",
+    "potencia": "20",
+    "capex": "172",
+    "tir": "10.7",
+    "cuota": "97200",
+    "anios": "15",
+    "probabilidad": "25%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-10-30",
+    "fechaDownside": "2026-11-30",
+    "comentarios": ""
   }
 ]
