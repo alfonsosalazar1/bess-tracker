@@ -245,5 +245,24 @@
     "fechaUpside": "",
     "fechaDownside": "",
     "comentarios": ""
+  },
+  {
+    "id": "mnmifyse4y5ys5i4klj",
+    "rm": "Javiera Beiza",
+    "empresa": "EAGON ",
+    "industria": "Forestal",
+    "oportunidad": "EAGON LAUTARO ",
+    "conFV": false,
+    "capacidad": "8",
+    "potencia": "",
+    "capex": "",
+    "tir": "",
+    "cuota": "",
+    "anios": "",
+    "probabilidad": "",
+    "status": "Mid Term",
+    "fechaUpside": "",
+    "fechaDownside": "",
+    "comentarios": ""
   }
 ]
