@@ -245,5 +245,24 @@
     "fechaUpside": "",
     "fechaDownside": "",
     "comentarios": ""
+  },
+  {
+    "id": "mosoy1gxmifc6w56hqq",
+    "rm": "Lucas Soulodre",
+    "empresa": "ZEYCO FRIGORIFICO ZEPEDA Y CORRAL SPA",
+    "industria": "Frigorífico",
+    "oportunidad": "Zeyco / Frigorifico Zepeda y Corral SPA - Planta ZC",
+    "conFV": true,
+    "capacidad": "2.5",
+    "potencia": "1.1",
+    "capex": "195",
+    "tir": "11.7",
+    "cuota": "6900",
+    "anios": "16",
+    "probabilidad": "25%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-09-19",
+    "fechaDownside": "2026-11-19",
+    "comentarios": ""
   }
 ]
