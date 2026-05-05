@@ -264,5 +264,24 @@
     "fechaUpside": "2026-09-19",
     "fechaDownside": "2026-11-19",
     "comentarios": ""
+  },
+  {
+    "id": "mospb4odmr9i33o74s8",
+    "rm": "Lucas Soulodre",
+    "empresa": "MULTI X",
+    "industria": "Acuícola",
+    "oportunidad": "MULTI X CARDONAL",
+    "conFV": true,
+    "capacidad": "12.7",
+    "potencia": "2.5",
+    "capex": "189",
+    "tir": "11.5",
+    "cuota": "34800",
+    "anios": "16",
+    "probabilidad": "25%",
+    "status": "Mid Term",
+    "fechaUpside": "2026-10-01",
+    "fechaDownside": "2026-12-31",
+    "comentarios": ""
   }
 ]
